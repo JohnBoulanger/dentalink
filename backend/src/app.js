@@ -9,8 +9,11 @@ const jobRoutes = require("./routes/jobs");
 const qualificationRoutes = require("./routes/qualifications");
 const systemsRoutes = require("./routes/system");
 const negotiationRoutes = require("./routes/negotiations");
+require("dotenv").config();
 
 const cors = require("cors");
+
+const FRONTEND_URL = process.env.FRONTEND_URL || "http://localhost:5173";
 
 function create_app() {
   const app = express();
@@ -18,7 +21,7 @@ function create_app() {
   // Set up cors to allow requests from frontend
   app.use(
     cors({
-      origin: "http://localhost:5173",
+      origin: FRONTEND_URL,
       methods: ["GET", "POST", "PUT", "DELETE", "PATCH"],
       allowedHeaders: ["Content-Type", "Authorization"],
       credentials: true,
