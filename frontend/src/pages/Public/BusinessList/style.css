@@ -1,0 +1,83 @@
+.BusinessList {
+  flex: 1;
+  padding: 48px 0;
+}
+
+.BusinessList h1 {
+  margin-bottom: 24px;
+}
+
+/* search and sort controls */
+.list-controls {
+  display: flex;
+  gap: 12px;
+  margin-bottom: 24px;
+  flex-wrap: wrap;
+}
+
+.search-input {
+  flex: 1;
+  min-width: 200px;
+}
+
+.list-controls select {
+  min-width: 120px;
+}
+
+/* business cards grid */
+.business-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 16px;
+}
+
+.business-card {
+  display: block;
+  padding: 20px;
+  border: 1px solid var(--border-light);
+  border-radius: 8px;
+  background: var(--bg-elevated);
+  text-decoration: none;
+  color: inherit;
+  transition:
+    border-color 0.15s ease,
+    box-shadow 0.15s ease;
+}
+
+.business-card:hover {
+  border-color: var(--accent);
+  box-shadow: var(--shadow-sm);
+}
+
+.business-card h3 {
+  margin-bottom: 6px;
+  color: var(--text-strong);
+}
+
+.business-email {
+  font-size: 0.875rem;
+  color: var(--accent);
+  margin-bottom: 8px;
+}
+
+.business-detail {
+  font-size: 0.8125rem;
+  color: var(--text-muted);
+  line-height: 1.5;
+}
+
+.empty-state {
+  text-align: center;
+  padding: 48px 0;
+  color: var(--text-muted);
+}
+
+@media (max-width: 768px) {
+  .list-controls {
+    flex-direction: column;
+  }
+
+  .business-grid {
+    grid-template-columns: 1fr;
+  }
+}
