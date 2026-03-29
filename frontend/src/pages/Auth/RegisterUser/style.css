@@ -35,12 +35,9 @@
   gap: 12px;
 }
 
-.form-row {
-  display: flex;
-  gap: 12px;
-}
-
+/* .form-row layout is now defined globally in index.css */
 .form-row input {
+  /* auth forms use bare inputs (not .form-field wrappers), so flex them here */
   flex: 1;
 }
 

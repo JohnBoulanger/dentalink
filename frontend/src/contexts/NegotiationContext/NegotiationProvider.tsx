@@ -13,9 +13,13 @@ export default function NegotiationProvider({ children }: { children: React.Reac
 
   const backendUrl = import.meta.env.VITE_BACKEND_URL || "http://localhost:3000";
 
-  // check for an active negotiation when user logs in
+  // check for an active negotiation when user logs in (regular or business)
+  // also clear when user logs out (token becomes null)
   useEffect(() => {
-    if (!token || role !== "regular") return;
+    if (!token || (role !== "regular" && role !== "business")) {
+      setHasActiveNeg(false);
+      return;
+    }
 
     api
       .get("/negotiations/me")
@@ -25,7 +29,7 @@ export default function NegotiationProvider({ children }: { children: React.Reac
 
   // maintain a global socket to catch negotiation:started from any page
   useEffect(() => {
-    if (!token || role !== "regular") return;
+    if (!token || (role !== "regular" && role !== "business")) return;
 
     const socket = io(backendUrl, {
       auth: { token },
@@ -33,10 +37,10 @@ export default function NegotiationProvider({ children }: { children: React.Reac
     });
     socketRef.current = socket;
 
-    // when a new negotiation starts, mark active and navigate there
+    // navigate to role-appropriate negotiation page when one starts
     socket.on("negotiation:started", () => {
       setHasActiveNeg(true);
-      navigate("/negotiations/me");
+      navigate(role === "business" ? "/business/negotiations/me" : "/negotiations/me");
     });
 
     return () => {

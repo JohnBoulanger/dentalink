@@ -1,0 +1,62 @@
+.AdminSettings {
+  padding: 32px 0 60px;
+}
+
+/* 2-column card grid */
+.settings-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 20px;
+}
+
+.settings-card {
+  background: var(--bg-elevated);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.settings-card-header h3 {
+  margin: 0 0 4px;
+  font-size: 1rem;
+}
+
+.settings-input-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.settings-input {
+  width: 100px;
+  flex-shrink: 0;
+}
+
+.settings-unit {
+  color: var(--text-muted);
+  font-size: 0.875rem;
+  white-space: nowrap;
+}
+
+.settings-error {
+  font-size: 0.8125rem;
+  color: var(--error, #dc2626);
+  margin: 0;
+}
+
+.settings-hint {
+  font-size: 0.75rem;
+  color: var(--text-muted);
+  margin: 0;
+}
+
+/* reuse admin-muted from Users/style.css */
+
+/* notice shown above settings grid explaining empty inputs */
+.settings-notice {
+  margin-bottom: 20px;
+  font-size: 0.875rem;
+}

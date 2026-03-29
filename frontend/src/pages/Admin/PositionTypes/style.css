@@ -1,0 +1,124 @@
+.AdminPositionTypes {
+  padding: 32px 0 60px;
+}
+
+/* create form card */
+.pt-create-form {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 20px;
+  background: var(--bg-elevated);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  margin-bottom: 20px;
+}
+
+.pt-toggle-label {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.875rem;
+  color: var(--text-muted);
+  cursor: pointer;
+}
+
+.pt-toggle-label input[type="checkbox"] {
+  width: auto;
+  accent-color: var(--accent);
+}
+
+/* position type list */
+.pt-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-bottom: 20px;
+}
+
+.pt-item {
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  background: var(--bg-elevated);
+  overflow: hidden;
+}
+
+/* dim hidden items */
+.pt-item-hidden {
+  opacity: 0.7;
+}
+
+.pt-row {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 14px 16px;
+  flex-wrap: wrap;
+}
+
+.pt-row-info {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+  flex: 1;
+  min-width: 0;
+}
+
+.pt-name {
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.pt-desc {
+  color: var(--text-muted);
+  font-size: 0.8125rem;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 320px;
+}
+
+.pt-row-meta {
+  color: var(--text-muted);
+  font-size: 0.8125rem;
+  white-space: nowrap;
+}
+
+.pt-qualified {
+  font-size: 0.8125rem;
+  color: var(--text-muted);
+}
+
+.pt-row-actions {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex-shrink: 0;
+}
+
+.pt-delete-confirm {
+  font-size: 0.8125rem;
+  color: var(--text-muted);
+}
+
+/* inline edit form */
+.pt-edit-form {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 16px;
+}
+
+.pt-edit-btns {
+  display: flex;
+  gap: 8px;
+}
+
+/* shown instead of a disabled delete button when qualified users exist */
+.pt-no-delete-hint {
+  font-size: 0.75rem;
+  color: var(--text-muted);
+  font-style: italic;
+  max-width: 180px;
+  text-align: right;
+}

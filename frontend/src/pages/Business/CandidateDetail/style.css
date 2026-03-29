@@ -1,0 +1,132 @@
+.BusinessCandidateDetail {
+  max-width: 680px;
+}
+
+.BusinessCandidateDetail > .back-link {
+  display: inline-block;
+  margin-bottom: 16px;
+}
+
+.bcd-card {
+  background: var(--bg-elevated);
+  border: 1px solid var(--border-light);
+  border-radius: 12px;
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+/* header: avatar + name */
+.bcd-header {
+  display: flex;
+  gap: 20px;
+  align-items: flex-start;
+}
+
+.bcd-avatar-wrap {
+  flex-shrink: 0;
+}
+
+.bcd-avatar {
+  width: 72px;
+  height: 72px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2px solid var(--border-light);
+}
+
+.bcd-avatar-placeholder {
+  width: 72px;
+  height: 72px;
+  border-radius: 50%;
+  background: var(--accent-subtle);
+  color: var(--accent);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.5rem;
+  font-weight: 700;
+}
+
+.bcd-identity h1 {
+  font-size: 1.375rem;
+  margin: 0 0 4px;
+}
+
+.bcd-contact {
+  font-size: 0.875rem;
+  color: var(--text-muted);
+  margin: 2px 0;
+}
+
+/* biography */
+.bcd-bio {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.bcd-bio p {
+  margin: 0;
+  font-size: 0.9rem;
+  color: var(--text-body);
+  line-height: 1.6;
+}
+
+/* resume + qualification */
+.bcd-resume,
+.bcd-qual {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.bcd-doc-link {
+  font-size: 0.875rem;
+  color: var(--accent);
+}
+
+.bcd-doc-link:hover {
+  opacity: 0.8;
+}
+
+.bcd-no-doc {
+  font-size: 0.875rem;
+  color: var(--text-muted);
+  font-style: italic;
+}
+
+.bcd-qual-note {
+  font-size: 0.875rem;
+  color: var(--text-body);
+  margin: 4px 0 0;
+}
+
+/* job info grid */
+.bcd-job-info {
+  display: grid;
+  grid-template-columns: max-content 1fr;
+  gap: 4px 16px;
+  align-items: center;
+  padding: 12px;
+  background: var(--bg-surface);
+  border-radius: 8px;
+  font-size: 0.875rem;
+}
+
+.bcd-job-info span:nth-child(even) {
+  color: var(--text-strong);
+}
+
+/* invite actions */
+.bcd-invite-actions {
+  padding-top: 4px;
+  border-top: 1px solid var(--border-light);
+}
+
+.bcd-invite-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}

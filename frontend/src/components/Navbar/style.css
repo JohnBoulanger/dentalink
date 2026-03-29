@@ -63,6 +63,67 @@
   color: var(--error);
 }
 
+.nav-logout-wrap {
+  position: relative;
+}
+
+/* small dropdown that appears below the sign out button */
+.nav-logout-confirm {
+  position: absolute;
+  top: calc(100% + 8px);
+  right: 0;
+  background: var(--bg-surface);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 10px 12px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  white-space: nowrap;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.12);
+  z-index: 200;
+  animation: dropdown-in 0.12s ease;
+}
+
+@keyframes dropdown-in {
+  from { opacity: 0; transform: translateY(-4px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.nav-logout-confirm span {
+  font-size: 0.8125rem;
+  color: var(--text-muted);
+}
+
+.nav-logout-cancel,
+.nav-logout-ok {
+  padding: 4px 10px;
+  border-radius: 5px;
+  font-size: 0.8125rem;
+  cursor: pointer;
+  border: 1px solid var(--border);
+  transition: background 0.12s ease, color 0.12s ease;
+}
+
+.nav-logout-cancel {
+  background: none;
+  color: var(--text-muted);
+}
+
+.nav-logout-cancel:hover {
+  background: var(--bg-muted);
+}
+
+.nav-logout-ok {
+  background: var(--error);
+  color: #fff;
+  border-color: var(--error);
+}
+
+.nav-logout-ok:hover {
+  opacity: 0.85;
+}
+
 /* responsive: stack links on small screens */
 @media (max-width: 768px) {
   .navbar {

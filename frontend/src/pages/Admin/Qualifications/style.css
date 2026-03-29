@@ -1,0 +1,104 @@
+.AdminQualifications {
+  padding: 32px 0 60px;
+}
+
+/* expandable row list */
+.qual-list {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin-bottom: 20px;
+}
+
+.qual-item {
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+/* summary row button */
+.qual-row {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 13px 16px;
+  background: var(--bg-elevated);
+  border: none;
+  cursor: pointer;
+  text-align: left;
+  transition: background 0.12s;
+  font-size: 0.875rem;
+  color: var(--text-body);
+}
+
+.qual-row:hover,
+.qual-row-open {
+  background: var(--bg-hover);
+}
+
+.qual-user {
+  font-weight: 600;
+  min-width: 140px;
+}
+
+.qual-position {
+  color: var(--text-muted);
+  flex: 1;
+}
+
+.qual-date {
+  color: var(--text-muted);
+  font-size: 0.8rem;
+  white-space: nowrap;
+}
+
+.qual-chevron {
+  font-size: 0.7rem;
+  color: var(--text-muted);
+  margin-left: auto;
+}
+
+/* expanded detail panel */
+.qual-detail {
+  padding: 20px;
+  border-top: 1px solid var(--border);
+  background: var(--bg-base);
+}
+
+.qual-detail-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+  gap: 16px;
+  margin-bottom: 20px;
+}
+
+/* items that span full width */
+.qual-detail-full {
+  grid-column: 1 / -1;
+}
+
+/* approve/reject action area */
+.qual-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  border-top: 1px solid var(--border-light);
+  padding-top: 16px;
+}
+
+.qual-note-input {
+  width: 100%;
+  resize: vertical;
+  min-height: 60px;
+}
+
+.qual-action-btns {
+  display: flex;
+  gap: 8px;
+}
+
+/* note shown when status filter is active (client-side only) */
+.qual-filter-note {
+  margin-bottom: 12px;
+}

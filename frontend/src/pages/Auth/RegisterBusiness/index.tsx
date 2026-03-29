@@ -3,6 +3,7 @@ import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 import api from "../../../utils/api";
 import PasswordInput from "../../../components/PasswordInput";
+import AddressSearch from "../../../components/AddressSearch";
 import "../RegisterUser/style.css";
 import "./style.css";
 
@@ -27,19 +28,38 @@ export default function RegisterBusiness() {
     setForm({ ...form, [e.target.name]: e.target.value });
   }
 
+  // called when the user picks a suggestion from AddressSearch
+  function handleAddressSelect(address: string, lat: number, lon: number) {
+    setForm({ ...form, postal_address: address, lat: String(lat), lon: String(lon) });
+    setError("");
+  }
+
   async function handleSubmit(e: React.SyntheticEvent) {
     e.preventDefault();
     setError("");
 
-    // validate coordinates before submitting
+    if (!form.postal_address.trim()) {
+      setError("Please enter and select a clinic address.");
+      return;
+    }
+
+    // validate coordinates — filled by autocomplete or manually entered
     const lat = parseFloat(form.lat);
     const lon = parseFloat(form.lon);
     if (isNaN(lat) || lat < -90 || lat > 90) {
-      setError("Latitude must be between -90 and 90");
+      setError(
+        form.lat
+          ? "Latitude must be between -90 and 90."
+          : "Please select an address from the suggestions, or enter coordinates manually."
+      );
       return;
     }
     if (isNaN(lon) || lon < -180 || lon > 180) {
-      setError("Longitude must be between -180 and 180");
+      setError(
+        form.lon
+          ? "Longitude must be between -180 and 180."
+          : "Please select an address from the suggestions, or enter coordinates manually."
+      );
       return;
     }
 
@@ -126,15 +146,14 @@ export default function RegisterBusiness() {
             required
           />
 
-          <input
-            name="postal_address"
-            type="text"
-            placeholder="Postal address"
-            value={form.postal_address}
-            onChange={handleChange}
+          {/* address autocomplete — populates postal_address, lat, lon on selection */}
+          <AddressSearch
+            placeholder="Clinic address"
+            onSelect={handleAddressSelect}
             required
           />
 
+          {/* lat/lon are auto-filled by autocomplete; editable for manual override */}
           <div className="form-row">
             <input
               name="lat"
@@ -143,7 +162,6 @@ export default function RegisterBusiness() {
               placeholder="Latitude"
               value={form.lat}
               onChange={handleChange}
-              required
             />
             <input
               name="lon"
@@ -152,10 +170,9 @@ export default function RegisterBusiness() {
               placeholder="Longitude"
               value={form.lon}
               onChange={handleChange}
-              required
             />
           </div>
-          <p className="hint">Location coordinates for your clinic</p>
+          <p className="hint">Filled automatically — you can also enter coordinates manually</p>
 
           <button type="submit" className="btn-primary" disabled={loading}>
             {loading ? "Creating account..." : "Create account"}

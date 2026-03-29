@@ -8,6 +8,10 @@ import { useNegotiation } from "../../../contexts/NegotiationContext/Negotiation
 import LoadingSpinner from "../../../components/LoadingSpinner";
 import "./style.css";
 
+// role-appropriate fallback links
+const JOBS_LINK: Record<string, string> = { business: "/business/jobs", regular: "/my-jobs" };
+const BROWSE_LINK: Record<string, string> = { business: "/business/jobs", regular: "/jobs" };
+
 interface NegotiationData {
   id: number;
   status: string;
@@ -15,7 +19,8 @@ interface NegotiationData {
   job: {
     id: number;
     position_type: { name: string };
-    business: { business_name: string };
+    // business may be omitted when the viewer is the business itself
+    business?: { business_name: string };
     salary_min: number;
     salary_max: number;
     start_time: string;
@@ -41,7 +46,7 @@ function formatCountdown(seconds: number): string {
 }
 
 export default function Negotiation() {
-  const { user, token } = useAuth();
+  const { user, token, role } = useAuth();
   const { setHasActiveNeg } = useNegotiation();
   // safe cast — guard undefined case
   const myId = (user as Record<string, unknown> | null)?.id as number | undefined;
@@ -187,12 +192,13 @@ export default function Negotiation() {
   if (loading) return <LoadingSpinner />;
 
   if (notFound) {
+    const jobsTo = JOBS_LINK[role ?? "regular"] ?? "/my-jobs";
     return (
       <div className="Negotiation page-enter">
         <h1>Negotiation</h1>
         <p className="empty-state">
-          No active negotiation. <Link to="/my-jobs">Go to My Jobs</Link> to start one when you have
-          a mutual interest.
+          No active negotiation. <Link to={jobsTo}>Go to jobs</Link> to start one when you have a
+          mutual interest.
         </p>
       </div>
     );
@@ -200,16 +206,15 @@ export default function Negotiation() {
 
   if (!negotiation) return null;
 
-  // guard: fall back gracefully if myId isn't available yet
-  const myDecision =
-    myId !== undefined && myId === negotiation.user.id
-      ? negotiation.decisions.candidate
-      : negotiation.decisions.business;
-
-  const theirDecision =
-    myId !== undefined && myId === negotiation.user.id
-      ? negotiation.decisions.business
-      : negotiation.decisions.candidate;
+  // determine which decision slot is "mine" based on role, not id comparison
+  // negotiation.user is always the candidate; business has its own slot
+  const iAmCandidate = role === "regular";
+  const myDecision = iAmCandidate
+    ? negotiation.decisions.candidate
+    : negotiation.decisions.business;
+  const theirDecision = iAmCandidate
+    ? negotiation.decisions.business
+    : negotiation.decisions.candidate;
 
   const isActive = negotiation.status === "active";
   const isSuccess = negotiation.status === "success";
@@ -225,7 +230,8 @@ export default function Negotiation() {
         <div>
           <h1>Negotiation</h1>
           <p className="neg-subtitle">
-            {negotiation.job.position_type.name} · {negotiation.job.business.business_name}
+            {negotiation.job.position_type.name}
+            {negotiation.job.business && ` · ${negotiation.job.business.business_name}`}
           </p>
         </div>
         <span className={`neg-status neg-status-${negotiation.status}`}>{negotiation.status}</span>
@@ -256,7 +262,8 @@ export default function Negotiation() {
       )}
       {isFailed && (
         <div className="neg-outcome failed">
-          Negotiation ended. <Link to="/jobs">Browse more jobs</Link>
+          Negotiation ended.{" "}
+          <Link to={BROWSE_LINK[role ?? "regular"] ?? "/jobs"}>Browse more jobs</Link>
         </div>
       )}
 

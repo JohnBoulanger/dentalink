@@ -1,3 +1,4 @@
+import { useRef, useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useAuth } from "../../contexts/AuthContext/AuthContext";
 import "./style.css";
@@ -6,6 +7,8 @@ export default function Navbar() {
   const { isAuthenticated, role, logout } = useAuth();
   const location = useLocation();
   const navigate = useNavigate();
+  const [showConfirm, setShowConfirm] = useState(false);
+  const wrapperRef = useRef<HTMLDivElement>(null);
 
   function handleLogout() {
     logout();
@@ -66,8 +69,8 @@ export default function Navbar() {
               My jobs
             </Link>
             <Link
-              to="/business/create-job"
-              className={isActive("/business/create-job") ? "active" : ""}
+              to="/business/jobs/new"
+              className={isActive("/business/jobs/new") ? "active" : ""}
             >
               Post job
             </Link>
@@ -104,11 +107,24 @@ export default function Navbar() {
           </>
         )}
 
-        {/* logout */}
+        {/* logout with confirmation popover */}
         {isAuthenticated && (
-          <button onClick={handleLogout} className="nav-logout">
-            Sign out
-          </button>
+          <div className="nav-logout-wrap" ref={wrapperRef}>
+            <button onClick={() => setShowConfirm((v) => !v)} className="nav-logout">
+              Sign out
+            </button>
+            {showConfirm && (
+              <div className="nav-logout-confirm">
+                <span>Sign out?</span>
+                <button className="nav-logout-cancel" onClick={() => setShowConfirm(false)}>
+                  Cancel
+                </button>
+                <button className="nav-logout-ok" onClick={handleLogout}>
+                  Confirm
+                </button>
+              </div>
+            )}
+          </div>
         )}
       </div>
     </nav>

@@ -1,0 +1,23 @@
+.BusinessJobCreate {
+  max-width: 600px;
+}
+
+.jcreate-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 28px;
+}
+
+.jcreate-form {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+.jcreate-actions {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding-top: 8px;
+}

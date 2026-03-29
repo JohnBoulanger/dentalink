@@ -1,0 +1,127 @@
+.BusinessJobDetail {
+  max-width: 720px;
+}
+
+.bjd-nav {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 20px;
+}
+
+.bjd-sub-links {
+  display: flex;
+  gap: 8px;
+}
+
+.bjd-card {
+  background: var(--bg-elevated);
+  border: 1px solid var(--border-light);
+  border-radius: 12px;
+  padding: 24px;
+}
+
+.bjd-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  margin-bottom: 24px;
+}
+
+.bjd-header h1 {
+  font-size: 1.5rem;
+  margin: 0 0 4px;
+}
+
+.bjd-worker {
+  font-size: 0.875rem;
+  color: var(--success);
+  font-weight: 500;
+}
+
+/* details grid */
+.bjd-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 16px;
+  margin-bottom: 16px;
+}
+
+.bjd-item {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.bjd-item span:last-child {
+  font-size: 0.9375rem;
+  color: var(--text-strong);
+}
+
+.bjd-note {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: 12px;
+  background: var(--bg-surface);
+  border-radius: 8px;
+  margin-bottom: 16px;
+}
+
+.bjd-note p {
+  margin: 0;
+  font-size: 0.9rem;
+  color: var(--text-body);
+  line-height: 1.5;
+}
+
+/* inline edit form */
+.bjd-edit-form {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  padding: 16px;
+  background: var(--bg-surface);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  margin-bottom: 16px;
+}
+
+.bjd-edit-actions {
+  display: flex;
+  gap: 8px;
+}
+
+/* action row */
+.bjd-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  align-items: center;
+  margin-top: 16px;
+  padding-top: 16px;
+  border-top: 1px solid var(--border-light);
+}
+
+.bjd-confirm-delete {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.875rem;
+  color: var(--error);
+}
+
+/* active negotiation banner */
+.bjd-neg-banner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-top: 16px;
+  padding: 12px 16px;
+  background: var(--accent-subtle);
+  border: 1px solid var(--accent);
+  border-radius: 8px;
+  font-size: 0.875rem;
+  color: var(--accent);
+}
