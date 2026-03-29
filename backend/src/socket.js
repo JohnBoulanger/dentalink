@@ -21,9 +21,10 @@ function attach_sockets(server) {
       return;
     }
     // associate socket with user and join the room
+    let userData;
     try {
       // verify the token and store id and role and join a room
-      const userData = jwt.verify(token, SECRET_KEY);
+      userData = jwt.verify(token, SECRET_KEY);
       socket.userId = userData.accountId;
       socket.role = userData.role;
       socket.join(`account:${userData.accountId}`);
@@ -32,6 +33,23 @@ function attach_sockets(server) {
       socket.disconnect();
       return;
     }
+
+    // auto-rejoin active negotiation room on reconnect (e.g. page refresh)
+    prisma.negotiation
+      .findFirst({
+        where: {
+          status: "active",
+          OR: [{ userId: userData.accountId }, { businessId: userData.accountId }],
+        },
+      })
+      .then((activeNeg) => {
+        if (activeNeg) {
+          socket.join(`negotiation:${activeNeg.id}`);
+        }
+      })
+      .catch(() => {
+        // non-fatal — socket still works, just won't receive room messages
+      });
 
     // handle incoming negotiation message from client
     socket.on("negotiation:message", async (data) => {

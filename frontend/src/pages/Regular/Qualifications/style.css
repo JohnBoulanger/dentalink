@@ -1,0 +1,129 @@
+/* qualifications management page */
+
+.Qualifications {
+  max-width: 680px;
+}
+
+.quals-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 24px;
+}
+
+/* create form */
+.qual-create-form {
+  background: var(--bg-elevated);
+  border: 1px solid var(--border-light);
+  border-radius: 8px;
+  padding: 20px;
+  margin-bottom: 24px;
+}
+
+.qual-create-form form {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+/* qualification cards */
+.quals-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.qual-card {
+  background: var(--bg-elevated);
+  border: 1px solid var(--border-light);
+  border-radius: 8px;
+  padding: 18px 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.qual-card-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.qual-card-header h3 {
+  font-size: 1rem;
+  margin-bottom: 2px;
+}
+
+.qual-note {
+  font-size: 0.875rem;
+  color: var(--text-muted);
+}
+
+/* status badges */
+.qual-status {
+  font-size: 0.75rem;
+  font-weight: 500;
+  padding: 3px 10px;
+  border-radius: 20px;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.qual-status-created {
+  background: var(--bg-surface);
+  color: var(--text-muted);
+}
+.qual-status-submitted {
+  background: rgba(43, 76, 126, 0.1);
+  color: var(--accent);
+}
+.qual-status-approved {
+  background: rgba(45, 106, 79, 0.1);
+  color: var(--success);
+}
+.qual-status-rejected {
+  background: var(--error-bg);
+  color: var(--error);
+}
+.qual-status-revised {
+  background: rgba(43, 76, 126, 0.08);
+  color: var(--accent);
+}
+
+/* actions row */
+.qual-card-actions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.qual-doc {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.qual-doc-link {
+  font-size: 0.8125rem;
+  color: var(--accent);
+}
+
+.qual-doc-missing {
+  font-size: 0.8125rem;
+  color: var(--text-muted);
+  font-style: italic;
+}
+
+.qual-updated {
+  font-size: 0.75rem;
+  color: var(--text-muted);
+}
+
+.empty-state {
+  color: var(--text-muted);
+  padding: 40px 0;
+  text-align: center;
+  font-size: 0.9375rem;
+}

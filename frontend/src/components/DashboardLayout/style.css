@@ -1,0 +1,95 @@
+/* dashboard shell: sidebar + main content */
+
+.dashboard-shell {
+  display: flex;
+  flex: 1;
+  gap: 0;
+  min-height: calc(100svh - 57px);
+}
+
+/* left sidebar */
+.dashboard-sidebar {
+  width: 180px;
+  flex-shrink: 0;
+  border-right: 1px solid var(--border-light);
+  padding: 28px 0;
+}
+
+.sidebar-nav {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+/* active negotiation indicator dot */
+.sidebar-neg-dot {
+  display: inline-block;
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--accent);
+  margin-left: 6px;
+  vertical-align: middle;
+  flex-shrink: 0;
+}
+
+.sidebar-link {
+  display: flex;
+  align-items: center;
+  padding: 8px 16px;
+  font-size: 0.875rem;
+  color: var(--text-muted);
+  text-decoration: none;
+  border-radius: 6px;
+  transition:
+    color 0.15s ease,
+    background 0.15s ease;
+  margin: 0 8px;
+}
+
+.sidebar-link:hover {
+  color: var(--text-strong);
+  background: var(--bg-surface);
+}
+
+.sidebar-link.active {
+  color: var(--accent);
+  background: var(--accent-subtle);
+  font-weight: 500;
+}
+
+/* main area */
+.dashboard-main {
+  flex: 1;
+  padding: 32px 32px 64px;
+  min-width: 0;
+}
+
+/* responsive: collapse sidebar to horizontal tabs on mobile */
+@media (max-width: 768px) {
+  .dashboard-shell {
+    flex-direction: column;
+  }
+
+  .dashboard-sidebar {
+    width: 100%;
+    border-right: none;
+    border-bottom: 1px solid var(--border-light);
+    padding: 12px 0;
+  }
+
+  .sidebar-nav {
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: 4px;
+    padding: 0 8px;
+  }
+
+  .sidebar-link {
+    margin: 0;
+  }
+
+  .dashboard-main {
+    padding: 24px 0 48px;
+  }
+}

@@ -1,0 +1,198 @@
+/* regular user profile page */
+
+.UserProfile {
+  max-width: 640px;
+}
+
+.UserProfile h1 {
+  margin-bottom: 28px;
+}
+
+/* top section: avatar + quick info */
+.profile-top {
+  display: flex;
+  gap: 24px;
+  margin-bottom: 28px;
+  align-items: flex-start;
+}
+
+.profile-avatar-wrap {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  flex-shrink: 0;
+}
+
+.profile-avatar {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2px solid var(--border-light);
+}
+
+.profile-avatar-placeholder {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  background: var(--accent-subtle);
+  color: var(--accent);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.5rem;
+  font-weight: 600;
+  letter-spacing: -0.02em;
+}
+
+.avatar-upload-btn {
+  background: none;
+  border: none;
+  padding: 0;
+  font-size: 0.8125rem;
+  color: var(--accent);
+  cursor: pointer;
+  transition: opacity 0.15s ease;
+}
+
+.avatar-upload-btn:hover {
+  opacity: 0.75;
+}
+
+.profile-quick-info {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.profile-name {
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: var(--text-strong);
+}
+
+.profile-email {
+  font-size: 0.875rem;
+  color: var(--text-muted);
+  margin-bottom: 8px;
+}
+
+/* availability toggle */
+.profile-availability {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-top: 4px;
+}
+
+.avail-label {
+  font-size: 0.875rem;
+  color: var(--text-muted);
+}
+
+.avail-toggle {
+  font-size: 0.8125rem;
+  font-weight: 500;
+  padding: 4px 12px;
+  border-radius: 20px;
+  border: none;
+  cursor: pointer;
+  transition: opacity 0.15s ease;
+}
+
+.avail-on {
+  background: rgba(45, 106, 79, 0.12);
+  color: var(--success);
+}
+
+.avail-off {
+  background: var(--bg-surface);
+  color: var(--text-muted);
+}
+
+.avail-toggle:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.profile-suspended {
+  font-size: 0.8125rem;
+  color: var(--error);
+  font-weight: 500;
+}
+
+.error-message.small {
+  font-size: 0.8125rem;
+  padding: 6px 10px;
+}
+
+/* resume row */
+.profile-resume {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: 16px;
+  background: var(--bg-elevated);
+  border: 1px solid var(--border-light);
+  border-radius: 8px;
+  margin-bottom: 28px;
+}
+
+.profile-resume-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.resume-link {
+  font-size: 0.875rem;
+  color: var(--accent);
+}
+
+.resume-missing {
+  font-size: 0.875rem;
+  color: var(--text-muted);
+  font-style: italic;
+}
+
+/* edit form */
+.profile-form {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.profile-form h2 {
+  font-size: 1.125rem;
+  margin-bottom: 4px;
+}
+
+.form-field {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.form-field label {
+  font-size: 0.8125rem;
+  color: var(--text-muted);
+  font-weight: 500;
+}
+
+.form-row {
+  display: flex;
+  gap: 12px;
+}
+
+.form-row .form-field {
+  flex: 1;
+}
+
+.detail-label {
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--text-muted);
+}

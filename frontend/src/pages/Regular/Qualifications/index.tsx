@@ -1,5 +1,299 @@
+import { useEffect, useRef, useState } from "react";
+import axios from "axios";
+import api from "../../../utils/api";
+import { useAuth } from "../../../contexts/AuthContext/AuthContext";
+import LoadingSpinner from "../../../components/LoadingSpinner";
 import "./style.css";
 
-export default function RegularQualifications() {
-  return <div className="RegularQualifications"></div>;
+interface Qualification {
+  id: number;
+  status: string;
+  note: string;
+  document: string | null;
+  position_type: { id: number; name: string };
+  updatedAt: string;
+}
+
+interface PositionType {
+  id: number;
+  name: string;
+}
+
+// status transitions a regular user can trigger
+const ALLOWED_SUBMIT: Record<string, string | null> = {
+  created: "submitted",
+  rejected: "revised",
+  approved: "revised",
+  submitted: null,
+  revised: null,
+};
+
+// persist qualification ids per user in localStorage
+function loadIds(userId: string): number[] {
+  try {
+    return JSON.parse(localStorage.getItem(`qual_ids_${userId}`) || "[]");
+  } catch {
+    return [];
+  }
+}
+
+function saveIds(userId: string, ids: number[]) {
+  localStorage.setItem(`qual_ids_${userId}`, JSON.stringify(ids));
+}
+
+export default function Qualifications() {
+  const { user } = useAuth();
+  const userId = String((user as Record<string, unknown>)?.id ?? "");
+
+  const [quals, setQuals] = useState<Qualification[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [positionTypes, setPositionTypes] = useState<PositionType[]>([]);
+
+  // create form state
+  const [showCreate, setShowCreate] = useState(false);
+  const [newPositionId, setNewPositionId] = useState("");
+  const [newNote, setNewNote] = useState("");
+  const [createLoading, setCreateLoading] = useState(false);
+  const [createError, setCreateError] = useState("");
+
+  // per-qualification action state
+  const [actionLoading, setActionLoading] = useState<number | null>(null);
+  const [actionError, setActionError] = useState<Record<number, string>>({});
+  const fileRefs = useRef<Record<number, HTMLInputElement | null>>({});
+
+  // load qualifications from localStorage cache, then refresh from API
+  useEffect(() => {
+    if (!userId) return;
+
+    async function load() {
+      setLoading(true);
+      const ids = loadIds(userId);
+      if (ids.length === 0) {
+        setLoading(false);
+        return;
+      }
+      const results = await Promise.all(
+        ids.map((id) =>
+          api
+            .get(`/qualifications/${id}`)
+            .then((r) => r.data as Qualification)
+            .catch(() => null)
+        )
+      );
+      // filter out any that returned null (deleted/not found)
+      const valid = results.filter(Boolean) as Qualification[];
+      const validIds = valid.map((q) => q.id);
+      saveIds(userId, validIds);
+      setQuals(valid);
+      setLoading(false);
+    }
+
+    load();
+  }, [userId]);
+
+  // load position types for the create form
+  useEffect(() => {
+    api
+      .get("/position-types")
+      .then((res) => setPositionTypes(res.data.results ?? res.data))
+      .catch(() => {});
+  }, []);
+
+  // create a new qualification
+  async function handleCreate(e: React.SyntheticEvent) {
+    e.preventDefault();
+    setCreateError("");
+    setCreateLoading(true);
+    try {
+      const res = await api.post("/qualifications", {
+        position_type_id: parseInt(newPositionId),
+        note: newNote,
+      });
+      const newQual = res.data as Qualification;
+      const ids = loadIds(userId);
+      saveIds(userId, [...ids, newQual.id]);
+      setQuals((prev) => [...prev, newQual]);
+      setShowCreate(false);
+      setNewPositionId("");
+      setNewNote("");
+    } catch (err) {
+      if (axios.isAxiosError(err)) {
+        if (err.response?.status === 409) {
+          setCreateError("You already have a qualification for this position.");
+        } else {
+          setCreateError(err.response?.data?.error || "Failed to create qualification.");
+        }
+      } else {
+        setCreateError("Failed to create qualification.");
+      }
+    } finally {
+      setCreateLoading(false);
+    }
+  }
+
+  // submit or revise a qualification
+  async function handleStatusChange(qualId: number, newStatus: string) {
+    setActionLoading(qualId);
+    setActionError((prev) => ({ ...prev, [qualId]: "" }));
+    try {
+      const res = await api.patch(`/qualifications/${qualId}`, { status: newStatus });
+      setQuals((prev) =>
+        prev.map((q) => (q.id === qualId ? { ...q, status: res.data.status } : q))
+      );
+    } catch (err) {
+      const msg = axios.isAxiosError(err)
+        ? err.response?.data?.error || "Action failed."
+        : "Action failed.";
+      setActionError((prev) => ({ ...prev, [qualId]: msg }));
+    } finally {
+      setActionLoading(null);
+    }
+  }
+
+  // upload document for a qualification
+  async function handleDocUpload(qualId: number, file: File) {
+    setActionLoading(qualId);
+    setActionError((prev) => ({ ...prev, [qualId]: "" }));
+    const formData = new FormData();
+    formData.append("file", file);
+    try {
+      const res = await api.put(`/qualifications/${qualId}/document`, formData, {
+        headers: { "Content-Type": "multipart/form-data" },
+      });
+      setQuals((prev) =>
+        prev.map((q) => (q.id === qualId ? { ...q, document: res.data.document } : q))
+      );
+    } catch (err) {
+      const msg = axios.isAxiosError(err)
+        ? err.response?.data?.error || "Upload failed."
+        : "Upload failed.";
+      setActionError((prev) => ({ ...prev, [qualId]: msg }));
+    } finally {
+      setActionLoading(null);
+    }
+  }
+
+  const backendUrl = import.meta.env.VITE_BACKEND_URL || "";
+
+  return (
+    <div className="Qualifications page-enter">
+      <div className="quals-header">
+        <h1>Qualifications</h1>
+        <button className="btn-primary btn-sm" onClick={() => setShowCreate(!showCreate)}>
+          {showCreate ? "Cancel" : "+ Add qualification"}
+        </button>
+      </div>
+
+      {/* create form */}
+      {showCreate && (
+        <div className="qual-create-form">
+          <form onSubmit={handleCreate}>
+            {createError && <p className="error-message">{createError}</p>}
+            <select
+              value={newPositionId}
+              onChange={(e) => setNewPositionId(e.target.value)}
+              required
+            >
+              <option value="">Select position type</option>
+              {positionTypes.map((pt) => (
+                <option key={pt.id} value={pt.id}>
+                  {pt.name}
+                </option>
+              ))}
+            </select>
+            <textarea
+              placeholder="Notes (optional)"
+              value={newNote}
+              onChange={(e) => setNewNote(e.target.value)}
+              rows={3}
+            />
+            <button type="submit" className="btn-primary" disabled={createLoading}>
+              {createLoading ? "Creating..." : "Create qualification"}
+            </button>
+          </form>
+        </div>
+      )}
+
+      {loading ? (
+        <LoadingSpinner />
+      ) : quals.length === 0 ? (
+        <p className="empty-state">No qualifications yet — add one to get started</p>
+      ) : (
+        <div className="quals-list">
+          {quals.map((q) => {
+            const nextStatus = ALLOWED_SUBMIT[q.status];
+            return (
+              <div key={q.id} className="qual-card">
+                <div className="qual-card-header">
+                  <div>
+                    <h3>{q.position_type.name}</h3>
+                    {q.note && <p className="qual-note">{q.note}</p>}
+                  </div>
+                  <span className={`qual-status qual-status-${q.status}`}>{q.status}</span>
+                </div>
+
+                {actionError[q.id] && <p className="error-message">{actionError[q.id]}</p>}
+
+                <div className="qual-card-actions">
+                  {/* document upload */}
+                  <div className="qual-doc">
+                    {q.document ? (
+                      <a
+                        href={`${backendUrl}${q.document}`}
+                        target="_blank"
+                        rel="noreferrer"
+                        className="qual-doc-link"
+                      >
+                        View document
+                      </a>
+                    ) : (
+                      <span className="qual-doc-missing">No document</span>
+                    )}
+                    <input
+                      type="file"
+                      accept="application/pdf"
+                      style={{ display: "none" }}
+                      ref={(el) => {
+                        fileRefs.current[q.id] = el;
+                      }}
+                      onChange={(e) => {
+                        const file = e.target.files?.[0];
+                        if (file) handleDocUpload(q.id, file);
+                      }}
+                    />
+                    <button
+                      className="btn-secondary btn-sm"
+                      onClick={() => fileRefs.current[q.id]?.click()}
+                      disabled={actionLoading === q.id}
+                    >
+                      {q.document ? "Replace PDF" : "Upload PDF"}
+                    </button>
+                  </div>
+
+                  {/* status transition */}
+                  {nextStatus && (
+                    <button
+                      className="btn-primary btn-sm"
+                      onClick={() => handleStatusChange(q.id, nextStatus)}
+                      disabled={actionLoading === q.id}
+                    >
+                      {actionLoading === q.id
+                        ? "Saving..."
+                        : nextStatus === "submitted"
+                          ? "Submit for review"
+                          : "Mark as revised"}
+                    </button>
+                  )}
+                </div>
+
+                <span className="qual-updated">
+                  Updated {new Date(q.updatedAt).toLocaleDateString()}
+                </span>
+              </div>
+            );
+          })}
+        </div>
+      )}
+    </div>
+  );
 }

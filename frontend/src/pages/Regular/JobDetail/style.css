@@ -1,0 +1,153 @@
+/* job detail page */
+
+.JobDetail {
+  max-width: 640px;
+}
+
+.back-link {
+  display: inline-block;
+  font-size: 0.875rem;
+  color: var(--text-muted);
+  margin-bottom: 20px;
+  text-decoration: none;
+  transition: color 0.15s ease;
+}
+
+.back-link:hover {
+  color: var(--text-strong);
+}
+
+.job-detail-card {
+  background: var(--bg-elevated);
+  border: 1px solid var(--border-light);
+  border-radius: 10px;
+  padding: 28px;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+/* header: title + status badge */
+.job-detail-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.job-detail-header h1 {
+  font-size: 1.5rem;
+  margin-bottom: 4px;
+}
+
+.job-detail-business {
+  font-size: 0.9375rem;
+  color: var(--text-muted);
+}
+
+.job-detail-business:hover {
+  color: var(--accent);
+}
+
+/* status badges */
+.status-badge {
+  font-size: 0.75rem;
+  font-weight: 500;
+  padding: 3px 10px;
+  border-radius: 20px;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.status-open {
+  background: rgba(43, 76, 126, 0.1);
+  color: var(--accent);
+}
+.status-filled {
+  background: rgba(45, 106, 79, 0.1);
+  color: var(--success);
+}
+.status-expired {
+  background: var(--bg-surface);
+  color: var(--text-muted);
+}
+.status-cancelled {
+  background: var(--error-bg);
+  color: var(--error);
+}
+.status-completed {
+  background: rgba(45, 106, 79, 0.1);
+  color: var(--success);
+}
+
+/* details grid */
+.job-detail-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+}
+
+.job-detail-item {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.detail-label {
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--text-muted);
+}
+
+.detail-value {
+  font-size: 0.9375rem;
+  color: var(--text-strong);
+  font-weight: 500;
+}
+
+/* note section */
+.job-detail-note {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: 14px;
+  background: var(--bg-surface);
+  border-radius: 6px;
+}
+
+.job-detail-note p {
+  font-size: 0.9375rem;
+  color: var(--text);
+  line-height: 1.6;
+}
+
+/* interest actions */
+.job-interest-actions {
+  padding-top: 4px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.interest-confirmed {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.interest-badge {
+  font-size: 0.8125rem;
+  color: var(--success);
+  font-weight: 500;
+}
+
+.interest-withdrawn {
+  font-size: 0.875rem;
+  color: var(--text-muted);
+}
+
+.job-detail-footer {
+  border-top: 1px solid var(--border-light);
+  padding-top: 16px;
+}
