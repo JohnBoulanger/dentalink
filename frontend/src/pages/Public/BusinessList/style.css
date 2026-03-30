@@ -1,6 +1,30 @@
+/* topography pattern — same as landing/dashboard */
+.BusinessList::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  background-image: url("/topo-light.svg");
+  background-size: 600px 600px;
+  pointer-events: none;
+  z-index: 0;
+  opacity: 0.28;
+}
+
+html.dark .BusinessList::before {
+  background-image: url("/topo-dark.svg");
+  opacity: 0.5;
+}
+
 .BusinessList {
   flex: 1;
   padding: 48px 0;
+  position: relative;
+}
+
+/* ensure content sits above the topo layer */
+.BusinessList > * {
+  position: relative;
+  z-index: 1;
 }
 
 .BusinessList h1 {

@@ -23,7 +23,8 @@ export default function BusinessList() {
   const keyword = useDebounce(searchInput, 300);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
-  const limit = 10;
+  // 9 per page keeps the 3-column grid full (3×3)
+  const limit = 9;
 
   // fetch businesses when debounced filters change
   useEffect(() => {

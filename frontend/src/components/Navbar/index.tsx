@@ -77,7 +77,7 @@ export default function Navbar() {
         {/* business user links */}
         {isAuthenticated && role === "business" && (
           <>
-            <Link to="/business/jobs" className={isActive("/business/jobs") ? "active" : ""}>
+            <Link to="/business/jobs" className={isActive("/business/jobs", true) ? "active" : ""}>
               My jobs
             </Link>
             <Link

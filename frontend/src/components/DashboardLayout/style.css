@@ -9,7 +9,7 @@
   background-size: 600px 600px;
   pointer-events: none;
   z-index: 0;
-  opacity: 0.45;
+  opacity: 0.28;
 }
 
 html.dark .dashboard-shell::before {

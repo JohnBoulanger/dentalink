@@ -50,7 +50,7 @@ export default function DashboardLayout() {
                 <NavLink
                   key={link.to}
                   to={link.to}
-                  end={link.to === "/business/jobs"}
+                  end={link.to === "/business/jobs" || link.to === "/business/jobs/new"}
                   className={({ isActive }) => "sidebar-link" + (isActive ? " active" : "")}
                 >
                   {link.label}
