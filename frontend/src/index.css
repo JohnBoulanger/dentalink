@@ -1,30 +1,30 @@
-/* — global theme inspired by dentalcorp.com — */
-/* warm white with deep forest green + bright lime accent */
+/* — global theme — */
+/* mint + cyan palette: soft mint green, dark cyan, light blue, platinum */
 
 @import url("https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;1,9..40,400&family=DM+Mono:wght@400;500&display=swap");
 
 :root {
-  /* palette — warm white with deep forest green + lime */
-  --bg: #faf9f6;
-  --bg-surface: #f0efeb;
+  /* palette — mint white base, dark cyan primary, light blue secondary */
+  --bg: #f0f8f6;
+  --bg-surface: #e4f2ef;
   --bg-elevated: #ffffff;
-  --text: #4e5a4c;
-  --text-strong: #1a2118;
-  --text-muted: #8a9487;
-  --border: #d4d8d1;
-  --border-light: #e4e8e1;
-  --accent: #1d4731;
-  --accent-hover: #142f20;
-  --accent-subtle: rgba(29, 71, 49, 0.08);
-  --accent2: #6db33f;
-  --accent2-hover: #599030;
-  --accent2-subtle: rgba(109, 179, 63, 0.1);
+  --text: #2c5059;
+  --text-strong: #0b2b31;
+  --text-muted: #6fa4ae;
+  --border: #c2dde6;
+  --border-light: #d8ecf2;
+  --accent: #19747e;
+  --accent-hover: #12585f;
+  --accent-subtle: rgba(25, 116, 126, 0.08);
+  --accent2: #3d8fa6;
+  --accent2-hover: #2e7a91;
+  --accent2-subtle: rgba(61, 143, 166, 0.1);
   --error: #c1121f;
   --error-bg: rgba(193, 18, 31, 0.06);
-  --success: #2d6a4f;
-  --success-bg: rgba(45, 106, 79, 0.06);
-  --shadow-sm: 0 1px 2px rgba(29, 31, 43, 0.04);
-  --shadow-md: 0 4px 12px rgba(29, 31, 43, 0.06);
+  --success: #1a7a68;
+  --success-bg: rgba(26, 122, 104, 0.06);
+  --shadow-sm: 0 1px 2px rgba(0, 40, 50, 0.06);
+  --shadow-md: 0 4px 12px rgba(0, 40, 50, 0.09);
   /* derived surface aliases used by multiple pages */
   --bg-base: var(--bg);
   --bg-hover: var(--bg-surface);
@@ -46,28 +46,28 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
-/* dark mode — .dark class on <html> has higher specificity than :root */
+/* dark mode — deep teal backgrounds, light cyan text, light blue accents */
 html.dark {
-  --bg: #14181a;
-  --bg-surface: #1c2120;
-  --bg-elevated: #222a27;
-  --text: #8a9e8c;
-  --text-strong: #dfe8de;
-  --text-muted: #5c6e5d;
-  --border: #2e3a30;
-  --border-light: #263028;
-  --accent: #4a8c63;
-  --accent-hover: #6aaa82;
-  --accent-subtle: rgba(74, 140, 99, 0.12);
-  --accent2: #8dc842;
-  --accent2-hover: #a8e05a;
-  --accent2-subtle: rgba(141, 200, 66, 0.14);
+  --bg: #0c1f24;
+  --bg-surface: #112830;
+  --bg-elevated: #163540;
+  --text: #7ab8c4;
+  --text-strong: #c8e8ee;
+  --text-muted: #466d78;
+  --border: #1e4550;
+  --border-light: #1a3b46;
+  --accent: #3aaabb;
+  --accent-hover: #55c0ce;
+  --accent-subtle: rgba(58, 170, 187, 0.12);
+  --accent2: #a9d6e5;
+  --accent2-hover: #c0e3ef;
+  --accent2-subtle: rgba(169, 214, 229, 0.14);
   --error: #e5383b;
   --error-bg: rgba(229, 56, 59, 0.1);
-  --success: #52b788;
-  --success-bg: rgba(82, 183, 136, 0.1);
-  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.25);
-  --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.35);
+  --success: #3abfa4;
+  --success-bg: rgba(58, 191, 164, 0.1);
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.3);
+  --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.4);
   /* derived surface aliases — dark mode overrides */
   --bg-base: var(--bg);
   --bg-hover: var(--bg-surface);
