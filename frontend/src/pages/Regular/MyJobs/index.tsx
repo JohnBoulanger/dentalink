@@ -148,8 +148,8 @@ export default function MyJobs() {
                     </span>
                   </div>
                   <div className="myjob-row-actions">
-                    {/* mutual interest — show negotiation button or in-progress label */}
-                    {item.mutual &&
+                    {/* mutual interest with open job — show negotiation button or in-progress label */}
+                    {item.mutual && item.job.status === "open" &&
                       (hasActiveNeg ? (
                         <Link to="/negotiations/me" className="btn-secondary btn-sm">
                           Negotiation in progress
@@ -165,7 +165,11 @@ export default function MyJobs() {
                             : "Start negotiation"}
                         </button>
                       ))}
-                    {!item.mutual && (
+                    {/* job filled after successful negotiation */}
+                    {item.mutual && item.job.status === "filled" && (
+                      <span className="myjob-status-confirmed">Job confirmed</span>
+                    )}
+                    {!item.mutual && item.job.status === "open" && (
                       <span className="myjob-status-pending">Pending business response</span>
                     )}
                     <span className={`status-dot status-${item.job.status}`}>

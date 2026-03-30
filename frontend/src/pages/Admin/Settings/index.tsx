@@ -4,14 +4,16 @@ import api from "../../../utils/api";
 import "../Users/style.css";
 import "./style.css";
 
-// each system setting — endpoint suffix, human label, unit label, min value
+// each system setting — endpoint, label, display unit, and multiplier to convert to native api unit
 interface SettingConfig {
   key: string;
   endpoint: string;
   field: string;
   label: string;
   description: string;
-  unit: "minutes" | "hours";
+  unit: "minutes" | "days";
+  // multiplier converts the display value to the native unit the backend service expects
+  multiplier: number;
   min: number;
 }
 
@@ -23,6 +25,7 @@ const SETTINGS: SettingConfig[] = [
     label: "Negotiation window",
     description: "How long each negotiation stays active before expiring.",
     unit: "minutes",
+    multiplier: 60_000, // minutes → milliseconds (service uses ms arithmetic)
     min: 1,
   },
   {
@@ -32,6 +35,7 @@ const SETTINGS: SettingConfig[] = [
     label: "Password reset cooldown",
     description: "Minimum time between activation / reset token requests.",
     unit: "minutes",
+    multiplier: 60, // minutes → seconds (service compares elapsed seconds)
     min: 0,
   },
   {
@@ -40,7 +44,8 @@ const SETTINGS: SettingConfig[] = [
     field: "job_start_window",
     label: "Job start window",
     description: "How close to shift start a no-show can be reported.",
-    unit: "minutes",
+    unit: "days",
+    multiplier: 1, // days → days (service converts days to ms internally)
     min: 1,
   },
   {
@@ -49,20 +54,11 @@ const SETTINGS: SettingConfig[] = [
     field: "availability_timeout",
     label: "Availability timeout",
     description: "Inactivity period after which a user is no longer discoverable.",
-    unit: "hours",
+    unit: "days",
+    multiplier: 86_400, // days → seconds (service compares elapsed seconds)
     min: 1,
   },
 ];
-
-// convert ms to display unit
-function msToDisplay(ms: number, unit: "minutes" | "hours"): number {
-  return unit === "hours" ? ms / 3_600_000 : ms / 60_000;
-}
-
-// convert display value back to ms
-function displayToMs(value: number, unit: "minutes" | "hours"): number {
-  return unit === "hours" ? value * 3_600_000 : value * 60_000;
-}
 
 interface SettingState {
   value: string; // display value (string for input)
@@ -89,10 +85,11 @@ export default function AdminSettings() {
       updateState(cfg.key, { error: `Must be at least ${cfg.min} ${cfg.unit}.` });
       return;
     }
-    const ms = displayToMs(raw, cfg.unit);
+    // convert display unit to the native unit the backend service expects
+    const nativeValue = raw * cfg.multiplier;
     updateState(cfg.key, { saving: true, error: "", saved: false });
     try {
-      await api.patch(cfg.endpoint, { [cfg.field]: ms });
+      await api.patch(cfg.endpoint, { [cfg.field]: nativeValue });
       updateState(cfg.key, { saving: false, saved: true, value: String(raw) });
       // clear the "saved" checkmark after 2s
       setTimeout(() => updateState(cfg.key, { saved: false }), 2000);
@@ -135,8 +132,8 @@ export default function AdminSettings() {
                 <input
                   type="number"
                   min={cfg.min}
-                  step={cfg.unit === "hours" ? 0.5 : 1}
-                  placeholder={`e.g. ${cfg.unit === "hours" ? 24 : 15}`}
+                  step={1}
+                  placeholder={cfg.unit === "days" ? "e.g. 7" : "e.g. 15"}
                   value={s.value}
                   onChange={(e) =>
                     updateState(cfg.key, { value: e.target.value, error: "", saved: false })
@@ -154,13 +151,6 @@ export default function AdminSettings() {
               </div>
 
               {s.error && <p className="settings-error">{s.error}</p>}
-
-              {/* show a hint about the ms conversion */}
-              {s.value && !isNaN(parseFloat(s.value)) && (
-                <p className="settings-hint">
-                  = {displayToMs(parseFloat(s.value), cfg.unit).toLocaleString()} ms
-                </p>
-              )}
             </div>
           );
         })}

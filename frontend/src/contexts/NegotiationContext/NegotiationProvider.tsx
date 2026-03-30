@@ -15,16 +15,21 @@ export default function NegotiationProvider({ children }: { children: React.Reac
 
   // check for an active negotiation when user logs in (regular or business)
   // also clear when user logs out (token becomes null)
+  // wrapped in async fn so all setState calls are deferred — avoids sync setState-in-effect warning
   useEffect(() => {
-    if (!token || (role !== "regular" && role !== "business")) {
-      setHasActiveNeg(false);
-      return;
+    async function checkActiveNeg() {
+      if (!token || (role !== "regular" && role !== "business")) {
+        setHasActiveNeg(false);
+        return;
+      }
+      try {
+        await api.get("/negotiations/me");
+        setHasActiveNeg(true);
+      } catch {
+        setHasActiveNeg(false);
+      }
     }
-
-    api
-      .get("/negotiations/me")
-      .then(() => setHasActiveNeg(true))
-      .catch(() => setHasActiveNeg(false));
+    checkActiveNeg();
   }, [token, role]);
 
   // maintain a global socket to catch negotiation:started from any page
@@ -38,9 +43,13 @@ export default function NegotiationProvider({ children }: { children: React.Reac
     socketRef.current = socket;
 
     // navigate to role-appropriate negotiation page when one starts
+    // skip navigation if already on the page — the initiating party navigates via REST response
     socket.on("negotiation:started", () => {
       setHasActiveNeg(true);
-      navigate(role === "business" ? "/business/negotiations/me" : "/negotiations/me");
+      const target = role === "business" ? "/business/negotiations/me" : "/negotiations/me";
+      if (!window.location.pathname.endsWith("/negotiations/me")) {
+        navigate(target);
+      }
     });
 
     return () => {

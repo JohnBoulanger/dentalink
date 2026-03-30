@@ -126,6 +126,12 @@
   font-style: italic;
 }
 
+.myjob-status-confirmed {
+  font-size: 0.8125rem;
+  color: var(--success, #22c55e);
+  font-weight: 600;
+}
+
 /* job status dots */
 .status-dot {
   font-size: 0.75rem;

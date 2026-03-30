@@ -23,12 +23,22 @@ export default function BusinessJobInterests() {
   const [page, setPage] = useState(1);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
+  // job status — needed to block negotiation start on filled/expired/cancelled jobs
+  const [jobStatus, setJobStatus] = useState<string | null>(null);
 
   // per-row negotiation start loading/error
   const [negLoading, setNegLoading] = useState<number | null>(null);
   const [negError, setNegError] = useState<Record<number, string>>({});
 
   const limit = 10;
+
+  // fetch job status once so we can block negotiation start when the job isn't open
+  useEffect(() => {
+    api
+      .get(`/jobs/${jobId}`)
+      .then((res) => setJobStatus(res.data.status))
+      .catch(() => {});
+  }, [jobId]);
 
   useEffect(() => {
     async function fetchInterests() {
@@ -130,7 +140,8 @@ export default function BusinessJobInterests() {
                   {negError[row.interest_id] && (
                     <span className="error-message small">{negError[row.interest_id]}</span>
                   )}
-                  {row.mutual && !hasActiveNeg && (
+                  {/* only allow starting a negotiation on open jobs */}
+                  {row.mutual && !hasActiveNeg && jobStatus === "open" && (
                     <button
                       className="btn-primary btn-sm"
                       onClick={() => handleStartNeg(row.interest_id)}
@@ -138,6 +149,10 @@ export default function BusinessJobInterests() {
                     >
                       {negLoading === row.interest_id ? "Starting..." : "Start negotiation"}
                     </button>
+                  )}
+                  {/* job filled after successful negotiation */}
+                  {row.mutual && jobStatus === "filled" && (
+                    <span className="myjob-status-confirmed">Job filled</span>
                   )}
                   <Link
                     to={`/business/jobs/${jobId}/candidates/${row.user.id}`}
