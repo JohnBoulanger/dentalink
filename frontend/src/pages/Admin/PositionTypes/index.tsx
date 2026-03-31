@@ -250,7 +250,7 @@ export default function AdminPositionTypes() {
           value={hiddenFilter}
           onChange={(e) => setHiddenFilter(e.target.value)}
         >
-          <option value="">All visibility</option>
+          <option value="">Visibility</option>
           <option value="false">Visible</option>
           <option value="true">Hidden</option>
         </select>

@@ -125,7 +125,7 @@ export default function AdminUsers() {
           value={activatedFilter}
           onChange={(e) => setActivatedFilter(e.target.value)}
         >
-          <option value="">All activation</option>
+          <option value="">Activation</option>
           <option value="true">Activated</option>
           <option value="false">Not activated</option>
         </select>
@@ -134,7 +134,7 @@ export default function AdminUsers() {
           value={suspendedFilter}
           onChange={(e) => setSuspendedFilter(e.target.value)}
         >
-          <option value="">All users</option>
+          <option value="">Suspension</option>
           <option value="false">Active only</option>
           <option value="true">Suspended only</option>
         </select>

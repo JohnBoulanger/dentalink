@@ -185,7 +185,7 @@ export default function AdminQualifications() {
           value={statusFilter}
           onChange={(e) => setStatusFilter(e.target.value)}
         >
-          <option value="">All statuses</option>
+          <option value="">Status</option>
           <option value="created">Created</option>
           <option value="submitted">Submitted</option>
           <option value="approved">Approved</option>

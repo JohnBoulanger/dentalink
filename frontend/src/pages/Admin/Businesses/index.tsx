@@ -145,7 +145,7 @@ export default function AdminBusinesses() {
           value={activatedFilter}
           onChange={(e) => setActivatedFilter(e.target.value)}
         >
-          <option value="">All activation</option>
+          <option value="">Activation</option>
           <option value="true">Activated</option>
           <option value="false">Not activated</option>
         </select>
@@ -154,7 +154,7 @@ export default function AdminBusinesses() {
           value={verifiedFilter}
           onChange={(e) => setVerifiedFilter(e.target.value)}
         >
-          <option value="">All verification</option>
+          <option value="">Verification</option>
           <option value="true">Verified</option>
           <option value="false">Unverified</option>
         </select>

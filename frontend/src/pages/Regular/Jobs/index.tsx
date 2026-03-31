@@ -116,7 +116,7 @@ export default function Jobs() {
           onChange={(e) => setPositionFilter(e.target.value)}
           className="jobs-filter"
         >
-          <option value="">All positions</option>
+          <option value="">Position type</option>
           {positionTypes.map((pt) => (
             <option key={pt.id} value={pt.id}>
               {pt.name}
