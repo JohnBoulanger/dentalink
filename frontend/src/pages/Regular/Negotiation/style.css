@@ -35,11 +35,11 @@
 }
 
 .neg-status-active {
-  background: rgba(43, 76, 126, 0.1);
+  background: var(--accent-subtle);
   color: var(--accent);
 }
 .neg-status-success {
-  background: rgba(45, 106, 79, 0.1);
+  background: var(--status-green-bg);
   color: var(--success);
 }
 .neg-status-failed {

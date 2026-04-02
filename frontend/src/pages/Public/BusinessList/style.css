@@ -1,33 +1,16 @@
-/* topography pattern — same as landing/dashboard */
-.BusinessList::before {
-  content: "";
-  position: fixed;
-  inset: 0;
-  background-image: url("/topo-light.svg");
-  background-size: 600px 600px;
-  pointer-events: none;
-  z-index: 0;
-  opacity: 0.28;
-}
-
-html.dark .BusinessList::before {
-  background-image: url("/topo-dark.svg");
-  opacity: 0.5;
-}
-
 .BusinessList {
   flex: 1;
   padding: 48px 0;
-  position: relative;
-}
-
-/* ensure content sits above the topo layer */
-.BusinessList > * {
-  position: relative;
-  z-index: 1;
 }
 
 .BusinessList h1 {
+  margin-bottom: 4px;
+}
+
+/* count subtitle below heading */
+.list-subtitle {
+  font-size: 0.875rem;
+  color: var(--text-muted);
   margin-bottom: 24px;
 }
 
@@ -37,11 +20,6 @@ html.dark .BusinessList::before {
   gap: 12px;
   margin-bottom: 24px;
   flex-wrap: wrap;
-}
-
-.search-input {
-  flex: 1;
-  min-width: 200px;
 }
 
 .list-controls select {
@@ -59,29 +37,62 @@ html.dark .BusinessList::before {
   display: block;
   padding: 20px;
   border: 1px solid var(--border-light);
+  /* colored left accent for visual interest */
+  border-left: 3px solid var(--accent);
   border-radius: 8px;
   background: var(--bg-elevated);
   text-decoration: none;
   color: inherit;
   transition:
     border-color 0.15s ease,
-    box-shadow 0.15s ease;
+    box-shadow 0.15s ease,
+    transform 0.15s ease;
 }
 
 .business-card:hover {
   border-color: var(--accent);
-  box-shadow: var(--shadow-sm);
+  box-shadow: var(--shadow-md);
+  /* subtle lift on hover */
+  transform: translateY(-2px);
 }
 
-.business-card h3 {
-  margin-bottom: 6px;
+/* card header with avatar + name/email */
+.card-header {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin-bottom: 14px;
+}
+
+/* initial-letter avatar circle */
+.card-avatar {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: var(--accent-subtle);
+  color: var(--accent);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.125rem;
+  font-weight: 600;
+  flex-shrink: 0;
+}
+
+.card-header h3 {
+  margin-bottom: 2px;
   color: var(--text-strong);
 }
 
 .business-email {
-  font-size: 0.875rem;
+  font-size: 0.8125rem;
   color: var(--accent);
-  margin-bottom: 8px;
+}
+
+/* card body — phone and address */
+.card-body {
+  padding-top: 12px;
+  border-top: 1px solid var(--border-light);
 }
 
 .business-detail {

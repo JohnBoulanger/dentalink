@@ -1,38 +1,45 @@
 /* — global theme — */
-/* frozen lake: snow white, light blue, steel blue-grey, navy */
+/* harbor haze: warm off-white, harbor blue, taupe, olive */
 
-@import url("https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;1,9..40,400&family=DM+Mono:wght@400;500&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Sora:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap");
 
 :root {
-  /* palette — snow white base, navy primary, steel blue secondary */
-  --bg: #fffafa;
-  --bg-surface: #eef4f9;
+  /* palette — warm off-white base, harbor blue primary, taupe secondary */
+  --bg: #f7f5f2;
+  --bg-surface: #edeae5;
   --bg-elevated: #ffffff;
-  --text: #3d5166;
-  --text-strong: #0d1b4e;
-  --text-muted: #6d8196;
-  --border: #c5d3de;
-  --border-light: #dde8ef;
-  --accent: #000080;
-  --accent-hover: #000060;
-  --accent-subtle: rgba(0, 0, 128, 0.08);
-  --accent2: #6d8196;
-  --accent2-hover: #5a6e80;
-  --accent2-subtle: rgba(109, 129, 150, 0.1);
+  --text: #5a574e;
+  --text-strong: #736F60;
+  --text-muted: #909EAE;
+  --border: #c5bfb5;
+  --border-light: #ddd8d0;
+  --accent: #5C8DC5;
+  --accent-hover: #4a7ab3;
+  --accent-subtle: rgba(92, 141, 197, 0.08);
+  --accent2: #909EAE;
+  --accent2-hover: #7d8b9b;
+  --accent2-subtle: rgba(144, 158, 174, 0.1);
   --error: #c1121f;
   --error-bg: rgba(193, 18, 31, 0.06);
-  --success: #1a6b5a;
-  --success-bg: rgba(26, 107, 90, 0.06);
-  --shadow-sm: 0 1px 2px rgba(0, 0, 100, 0.06);
-  --shadow-md: 0 4px 12px rgba(0, 0, 100, 0.09);
+  --success: #4a8b6e;
+  --success-bg: rgba(74, 139, 110, 0.06);
+  --accent-warm: #AD9E90;
+  --accent-warm-subtle: rgba(173, 158, 144, 0.08);
+  --shadow-sm: 0 1px 2px rgba(115, 111, 96, 0.06);
+  --shadow-md: 0 4px 12px rgba(115, 111, 96, 0.09);
   /* derived surface aliases used by multiple pages */
   --bg-base: var(--bg);
   --bg-hover: var(--bg-surface);
   --text-body: var(--text);
 
+  /* status badge helpers */
+  --status-green-bg: rgba(74, 139, 110, 0.1);
+  --status-amber-bg: rgba(173, 158, 144, 0.12);
+  --status-amber-text: #8a7d6b;
+
   /* typography */
-  --font-body: "DM Sans", system-ui, sans-serif;
-  --font-mono: "DM Mono", ui-monospace, monospace;
+  --font-body: "Sora", system-ui, sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, monospace;
 
   font-family: var(--font-body);
   font-size: 16px;
@@ -44,34 +51,6 @@
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-}
-
-/* dark mode — frozen lake at night: deep navy, icy light blue accents */
-html.dark {
-  --bg: #06091a;
-  --bg-surface: #0c1230;
-  --bg-elevated: #121a3e;
-  --text: #8aaec2;
-  --text-strong: #c8dff0;
-  --text-muted: #4a6378;
-  --border: #1a2850;
-  --border-light: #152045;
-  --accent: #4d70e8;
-  --accent-hover: #6687ee;
-  --accent-subtle: rgba(77, 112, 232, 0.12);
-  --accent2: #add8e6;
-  --accent2-hover: #c5e5f0;
-  --accent2-subtle: rgba(173, 216, 230, 0.14);
-  --error: #e5383b;
-  --error-bg: rgba(229, 56, 59, 0.1);
-  --success: #3abfa4;
-  --success-bg: rgba(58, 191, 164, 0.1);
-  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.3);
-  --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.45);
-  /* derived surface aliases — dark mode overrides */
-  --bg-base: var(--bg);
-  --bg-hover: var(--bg-surface);
-  --text-body: var(--text);
 }
 
 /* reset */
@@ -144,13 +123,13 @@ input,
 select,
 textarea {
   font-family: var(--font-body);
-  font-size: 0.9375rem;
+  font-size: 0.875rem;
   line-height: 1.5;
   color: var(--text-strong);
   background: var(--bg-elevated);
   border: 1px solid var(--border);
-  border-radius: 6px;
-  padding: 10px 14px;
+  border-radius: 8px;
+  padding: 9px 14px;
   width: 100%;
   outline: none;
   transition:
@@ -158,9 +137,20 @@ textarea {
     box-shadow 0.15s ease;
 }
 
+/* custom select arrow and padding */
+select {
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%23909EAE' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 12px center;
+  padding-right: 36px;
+  cursor: pointer;
+}
+
 input::placeholder,
 textarea::placeholder {
   color: var(--text-muted);
+  font-size: 0.875rem;
 }
 
 input:focus,
@@ -178,7 +168,7 @@ button {
   letter-spacing: -0.01em;
   cursor: pointer;
   border: none;
-  border-radius: 6px;
+  border-radius: 10px;
   padding: 10px 20px;
   transition:
     background 0.15s ease,
@@ -199,6 +189,11 @@ button:disabled {
 .btn-primary {
   background: var(--accent);
   color: #fff;
+  border-radius: 10px;
+  padding: 10px 20px;
+  font-weight: 500;
+  text-decoration: none;
+  display: inline-block;
 }
 
 .btn-primary:hover:not(:disabled) {
@@ -211,6 +206,11 @@ button:disabled {
   background: transparent;
   color: var(--text-strong);
   border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 10px 20px;
+  font-weight: 500;
+  text-decoration: none;
+  display: inline-block;
 }
 
 .btn-secondary:hover:not(:disabled) {
@@ -223,6 +223,11 @@ button:disabled {
   background: var(--error);
   color: #fff;
   border: none;
+  border-radius: 10px;
+  padding: 10px 20px;
+  font-weight: 500;
+  text-decoration: none;
+  display: inline-block;
 }
 
 .btn-danger:hover:not(:disabled) {
@@ -278,7 +283,7 @@ button:disabled {
   color: var(--accent);
 }
 .status-filled {
-  background: rgba(45, 106, 79, 0.1);
+  background: var(--status-green-bg);
   color: var(--success);
 }
 .status-expired {
@@ -290,7 +295,7 @@ button:disabled {
   color: var(--error);
 }
 .status-completed {
-  background: rgba(45, 106, 79, 0.1);
+  background: var(--status-green-bg);
   color: var(--success);
 }
 
@@ -361,6 +366,27 @@ button:disabled {
 
 .page-enter {
   animation: fadeIn 0.3s ease forwards;
+}
+
+/* filter / sort control bars — compact layout, not full-width stretch */
+.list-controls,
+.admin-controls,
+.jobs-controls {
+  align-items: center;
+}
+
+.list-controls select,
+.admin-controls select,
+.jobs-controls select,
+.bjobs-sort-row select {
+  width: auto;
+  min-width: 0;
+}
+
+.search-input,
+.admin-search,
+.jobs-filter {
+  max-width: 280px;
 }
 
 /* responsive */

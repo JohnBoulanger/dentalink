@@ -3,6 +3,7 @@ import { Link, useParams } from "react-router-dom";
 import axios from "axios";
 import api from "../../../utils/api";
 import LoadingSpinner from "../../../components/LoadingSpinner";
+import MapEmbed from "../../../components/MapEmbed";
 import "./style.css";
 
 interface BusinessData {
@@ -90,18 +91,26 @@ export default function PublicBusinessProfile() {
         {business.location && (
           <div className="detail-row">
             <span className="detail-label">Location</span>
-            {/* link to google maps instead of showing raw coordinates */}
+            {/* secondary link to google maps for directions */}
             <a
               href={`https://www.google.com/maps?q=${business.location.lat},${business.location.lon}`}
               target="_blank"
               rel="noopener noreferrer"
               className="map-link"
             >
-              View on map ↗
+              Get directions ↗
             </a>
           </div>
         )}
       </div>
+
+      {/* embedded interactive map when coordinates are available */}
+      {business.location && (
+        <div className="profile-map">
+          <h3>Location</h3>
+          <MapEmbed lat={business.location.lat} lon={business.location.lon} />
+        </div>
+      )}
 
       {business.biography && (
         <div className="profile-bio">

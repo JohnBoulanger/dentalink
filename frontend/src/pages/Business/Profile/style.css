@@ -77,13 +77,13 @@
 }
 
 .biz-badge.verified {
-  background: rgba(45, 106, 79, 0.12);
+  background: var(--status-green-bg);
   color: var(--success);
 }
 
 .biz-badge.unverified {
-  background: rgba(180, 83, 9, 0.1);
-  color: #b45309;
+  background: var(--status-amber-bg);
+  color: var(--status-amber-text);
 }
 
 .biz-owner {
@@ -119,6 +119,11 @@
   color: var(--text-strong);
 }
 
+/* embedded map below details */
+.biz-map {
+  margin-bottom: 20px;
+}
+
 .biz-bio {
   display: flex;
   flex-direction: column;
@@ -140,10 +145,10 @@
 /* pending verification warning */
 .biz-unverified-notice {
   padding: 12px 16px;
-  background: rgba(180, 83, 9, 0.08);
-  border: 1px solid rgba(180, 83, 9, 0.2);
+  background: var(--status-amber-bg);
+  border: 1px solid var(--accent-warm);
   border-radius: 8px;
   font-size: 0.875rem;
-  color: #92400e;
+  color: var(--status-amber-text);
   line-height: 1.5;
 }

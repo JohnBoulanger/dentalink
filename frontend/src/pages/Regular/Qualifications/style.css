@@ -75,11 +75,11 @@
   color: var(--text-muted);
 }
 .qual-status-submitted {
-  background: rgba(43, 76, 126, 0.1);
+  background: var(--accent-subtle);
   color: var(--accent);
 }
 .qual-status-approved {
-  background: rgba(45, 106, 79, 0.1);
+  background: var(--status-green-bg);
   color: var(--success);
 }
 .qual-status-rejected {
@@ -87,7 +87,7 @@
   color: var(--error);
 }
 .qual-status-revised {
-  background: rgba(43, 76, 126, 0.08);
+  background: var(--accent-subtle);
   color: var(--accent);
 }
 

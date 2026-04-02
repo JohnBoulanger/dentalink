@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import axios from "axios";
 import api from "../../../utils/api";
 import LoadingSpinner from "../../../components/LoadingSpinner";
+import MapEmbed from "../../../components/MapEmbed";
 import "./style.css";
 
 interface BusinessProfile {
@@ -158,6 +159,13 @@ export default function BusinessProfile() {
           <span>{new Date(profile.createdAt).toLocaleDateString()}</span>
         </div>
       </div>
+
+      {/* embedded map when coordinates are available */}
+      {profile.location && (
+        <div className="biz-map">
+          <MapEmbed lat={profile.location.lat} lon={profile.location.lon} />
+        </div>
+      )}
 
       {/* biography */}
       {profile.biography && (

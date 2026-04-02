@@ -103,7 +103,7 @@
 }
 
 .avail-on {
-  background: rgba(45, 106, 79, 0.12);
+  background: var(--status-green-bg);
   color: var(--success);
 }
 

@@ -37,31 +37,31 @@ interface AddressSearchProps {
 }
 
 // builds a concise label from nominatim address components.
-// defined outside the component to avoid recreation on every render.
-// falls back gracefully for unnamed places, non-latin scripts, etc.
+// only includes up to street + city — no postal code, province, or country.
 function shortLabel(result: NominatimResult): string {
   const addr = result.address;
 
-  // no address data at all — use the full display_name which nominatim
-  // always provides, even for non-latin scripts
-  if (!addr) return result.display_name;
+  // no address data at all — trim the full display_name to city granularity
+  if (!addr) {
+    // take at most the first two comma-separated parts
+    const parts = result.display_name.split(",").map((s) => s.trim());
+    return parts.slice(0, 2).join(", ");
+  }
 
   const road = addr.road;
   // city-level: prefer city, fall back to town, then village, then county
   const city = addr.city ?? addr.town ?? addr.village ?? addr.county;
-  const region = addr.state;
-  const country = addr.country;
 
-  // build parts — skip undefined / empty strings
+  // build parts — street + city only
   const parts: string[] = [];
   if (road) parts.push(road);
   if (city) parts.push(city);
-  if (region && region !== city) parts.push(region);
-  if (country) parts.push(country);
 
-  // if we ended up with nothing meaningful (e.g. unnamed place with only
-  // internal nominatim fields), fall back to the full display_name
-  if (parts.length === 0) return result.display_name;
+  // if we ended up with nothing meaningful, take first two parts of display_name
+  if (parts.length === 0) {
+    const fallback = result.display_name.split(",").map((s) => s.trim());
+    return fallback.slice(0, 2).join(", ");
+  }
 
   return parts.join(", ");
 }
@@ -174,7 +174,8 @@ export default function AddressSearch({
     setSuggestions([]);
     setOpen(false);
     setSelected(true);
-    onSelect(s.fullLabel, s.lat, s.lon);
+    // store the short city-level label, not the full nominatim address
+    onSelect(s.label, s.lat, s.lon);
   }
 
   // reopen dropdown on focus if there are already fetched suggestions for the

@@ -1,16 +1,13 @@
 import { useRef, useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useAuth } from "../../contexts/AuthContext/AuthContext";
-import { useTheme } from "../../contexts/ThemeContext/ThemeContext";
 import "./style.css";
 
 export default function Navbar() {
   const { isAuthenticated, role, logout } = useAuth();
-  const { theme, setTheme } = useTheme();
   const location = useLocation();
   const navigate = useNavigate();
   const [showConfirm, setShowConfirm] = useState(false);
-  const [showSettings, setShowSettings] = useState(false);
   const wrapperRef = useRef<HTMLDivElement>(null);
 
   function handleLogout() {
@@ -28,7 +25,6 @@ export default function Navbar() {
   function handleKeyDown(e: React.KeyboardEvent) {
     if (e.key === "Escape") {
       setShowConfirm(false);
-      setShowSettings(false);
     }
   }
 
@@ -121,54 +117,6 @@ export default function Navbar() {
             </Link>
           </>
         )}
-
-        {/* theme toggle — sun/moon split circle */}
-        <div className="nav-settings-wrap">
-          <button
-            className="nav-settings-btn"
-            onClick={() => setShowSettings((v) => !v)}
-            aria-label="Toggle theme"
-          >
-            {/* half-light half-dark circle — universally recognised theme toggle */}
-            <svg
-              width="16"
-              height="16"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="2"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              aria-hidden="true"
-            >
-              <circle cx="12" cy="12" r="9" />
-              <path d="M12 3a9 9 0 0 1 0 18z" fill="currentColor" stroke="none" />
-            </svg>
-          </button>
-          {showSettings && (
-            <div className="nav-settings-dropdown" role="dialog" aria-label="Theme settings">
-              <p className="nav-settings-label">Theme</p>
-              <button
-                className={`nav-settings-option ${theme === "light" ? "active" : ""}`}
-                onClick={() => {
-                  setTheme("light");
-                  setShowSettings(false);
-                }}
-              >
-                ☀ Light
-              </button>
-              <button
-                className={`nav-settings-option ${theme === "dark" ? "active" : ""}`}
-                onClick={() => {
-                  setTheme("dark");
-                  setShowSettings(false);
-                }}
-              >
-                ☾ Dark
-              </button>
-            </div>
-          )}
-        </div>
 
         {/* logout with confirmation popover */}
         {isAuthenticated && (

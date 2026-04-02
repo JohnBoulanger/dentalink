@@ -26,7 +26,6 @@
 }
 
 .admin-search {
-  flex: 1;
   min-width: 200px;
 }
 
@@ -95,23 +94,23 @@
 }
 
 .badge-green {
-  background: var(--status-completed-bg, #d1fae5);
-  color: var(--status-completed-text, #065f46);
+  background: var(--status-green-bg);
+  color: var(--success);
 }
 
 .badge-red {
-  background: var(--status-cancelled-bg, #fee2e2);
-  color: var(--status-cancelled-text, #991b1b);
+  background: var(--error-bg);
+  color: var(--error);
 }
 
 .badge-grey {
-  background: var(--status-expired-bg, #e5e7eb);
-  color: var(--status-expired-text, #6b7280);
+  background: var(--bg-surface);
+  color: var(--text-muted);
 }
 
 .badge-amber {
-  background: #fef3c7;
-  color: #92400e;
+  background: var(--status-amber-bg);
+  color: var(--status-amber-text);
 }
 
 /* muted text helper used across admin pages */

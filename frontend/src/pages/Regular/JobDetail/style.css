@@ -60,11 +60,11 @@
 }
 
 .status-open {
-  background: rgba(43, 76, 126, 0.1);
+  background: var(--accent-subtle);
   color: var(--accent);
 }
 .status-filled {
-  background: rgba(45, 106, 79, 0.1);
+  background: var(--status-green-bg);
   color: var(--success);
 }
 .status-expired {
@@ -76,7 +76,7 @@
   color: var(--error);
 }
 .status-completed {
-  background: rgba(45, 106, 79, 0.1);
+  background: var(--status-green-bg);
   color: var(--success);
 }
 

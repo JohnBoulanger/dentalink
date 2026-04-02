@@ -1,7 +1,6 @@
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import "./App.css";
 import AuthProvider from "./contexts/AuthContext/AuthProvider";
-import ThemeProvider from "./contexts/ThemeContext/ThemeProvider";
 import NegotiationProvider from "./contexts/NegotiationContext/NegotiationProvider";
 import Layout from "./components/Layout";
 import DashboardLayout from "./components/DashboardLayout";
@@ -51,78 +50,76 @@ import NotFound from "./pages/NotFound";
 
 function App() {
   return (
-    <ThemeProvider>
-      <AuthProvider>
-        <BrowserRouter>
-          {/* negotiation provider needs router context for useNavigate */}
-          <NegotiationProvider>
-            <Routes>
-              {/* public layout: navbar + centered content */}
-              <Route path="/" element={<Layout />}>
-                <Route index element={<Landing />} />
-                <Route path="businesses" element={<BusinessList />} />
-                <Route path="businesses/:businessId" element={<PublicBusinessProfile />} />
+    <AuthProvider>
+      <BrowserRouter>
+        {/* negotiation provider needs router context for useNavigate */}
+        <NegotiationProvider>
+          <Routes>
+            {/* public layout: navbar + centered content */}
+            <Route path="/" element={<Layout />}>
+              <Route index element={<Landing />} />
+              <Route path="businesses" element={<BusinessList />} />
+              <Route path="businesses/:businessId" element={<PublicBusinessProfile />} />
 
-                {/* auth routes */}
-                <Route path="login" element={<Login />} />
-                <Route path="register" element={<RegisterUser />} />
-                <Route path="register/business" element={<RegisterBusiness />} />
-                <Route path="activate/:resetToken" element={<AccountActivation />} />
-                <Route path="forgot-password" element={<ForgotPassword />} />
-                <Route path="reset-password/:resetToken" element={<ResetPassword />} />
+              {/* auth routes */}
+              <Route path="login" element={<Login />} />
+              <Route path="register" element={<RegisterUser />} />
+              <Route path="register/business" element={<RegisterBusiness />} />
+              <Route path="activate/:resetToken" element={<AccountActivation />} />
+              <Route path="forgot-password" element={<ForgotPassword />} />
+              <Route path="reset-password/:resetToken" element={<ResetPassword />} />
 
-                <Route path="*" element={<NotFound />} />
+              <Route path="*" element={<NotFound />} />
+            </Route>
+
+            {/* regular user dashboard */}
+            <Route element={<ProtectedRoute allowedRoles={["regular"]} />}>
+              <Route element={<DashboardLayout />}>
+                <Route path="/jobs" element={<Jobs />} />
+                <Route path="/jobs/:jobId" element={<JobDetail />} />
+                <Route path="/my-jobs" element={<MyJobs />} />
+                <Route path="/qualifications" element={<Qualifications />} />
+                <Route path="/position-types" element={<RegularPositionTypes />} />
+                <Route path="/profile" element={<UserProfile />} />
+                <Route path="/negotiations/me" element={<Negotiation />} />
               </Route>
+            </Route>
 
-              {/* regular user dashboard */}
-              <Route element={<ProtectedRoute allowedRoles={["regular"]} />}>
-                <Route element={<DashboardLayout />}>
-                  <Route path="/jobs" element={<Jobs />} />
-                  <Route path="/jobs/:jobId" element={<JobDetail />} />
-                  <Route path="/my-jobs" element={<MyJobs />} />
-                  <Route path="/qualifications" element={<Qualifications />} />
-                  <Route path="/position-types" element={<RegularPositionTypes />} />
-                  <Route path="/profile" element={<UserProfile />} />
-                  <Route path="/negotiations/me" element={<Negotiation />} />
-                </Route>
+            {/* business dashboard */}
+            <Route element={<ProtectedRoute allowedRoles={["business"]} />}>
+              <Route element={<DashboardLayout />}>
+                <Route path="/business/jobs" element={<BusinessJobs />} />
+                <Route path="/business/jobs/new" element={<BusinessJobCreate />} />
+                <Route path="/business/jobs/:jobId" element={<BusinessJobDetail />} />
+                <Route path="/business/jobs/:jobId/candidates" element={<BusinessCandidates />} />
+                <Route
+                  path="/business/jobs/:jobId/candidates/:userId"
+                  element={<BusinessCandidateDetail />}
+                />
+                <Route
+                  path="/business/jobs/:jobId/interests"
+                  element={<BusinessJobInterests />}
+                />
+                <Route path="/business/profile" element={<BusinessProfile />} />
+                <Route path="/business/profile/edit" element={<BusinessProfileEdit />} />
+                <Route path="/business/negotiations/me" element={<Negotiation />} />
               </Route>
+            </Route>
 
-              {/* business dashboard */}
-              <Route element={<ProtectedRoute allowedRoles={["business"]} />}>
-                <Route element={<DashboardLayout />}>
-                  <Route path="/business/jobs" element={<BusinessJobs />} />
-                  <Route path="/business/jobs/new" element={<BusinessJobCreate />} />
-                  <Route path="/business/jobs/:jobId" element={<BusinessJobDetail />} />
-                  <Route path="/business/jobs/:jobId/candidates" element={<BusinessCandidates />} />
-                  <Route
-                    path="/business/jobs/:jobId/candidates/:userId"
-                    element={<BusinessCandidateDetail />}
-                  />
-                  <Route
-                    path="/business/jobs/:jobId/interests"
-                    element={<BusinessJobInterests />}
-                  />
-                  <Route path="/business/profile" element={<BusinessProfile />} />
-                  <Route path="/business/profile/edit" element={<BusinessProfileEdit />} />
-                  <Route path="/business/negotiations/me" element={<Negotiation />} />
-                </Route>
+            {/* admin dashboard */}
+            <Route element={<ProtectedRoute allowedRoles={["admin"]} />}>
+              <Route element={<DashboardLayout />}>
+                <Route path="/admin/users" element={<AdminUsers />} />
+                <Route path="/admin/businesses" element={<AdminBusinesses />} />
+                <Route path="/admin/qualifications" element={<AdminQualifications />} />
+                <Route path="/admin/position-types" element={<AdminPositionTypes />} />
+                <Route path="/admin/settings" element={<AdminSettings />} />
               </Route>
-
-              {/* admin dashboard */}
-              <Route element={<ProtectedRoute allowedRoles={["admin"]} />}>
-                <Route element={<DashboardLayout />}>
-                  <Route path="/admin/users" element={<AdminUsers />} />
-                  <Route path="/admin/businesses" element={<AdminBusinesses />} />
-                  <Route path="/admin/qualifications" element={<AdminQualifications />} />
-                  <Route path="/admin/position-types" element={<AdminPositionTypes />} />
-                  <Route path="/admin/settings" element={<AdminSettings />} />
-                </Route>
-              </Route>
-            </Routes>
-          </NegotiationProvider>
-        </BrowserRouter>
-      </AuthProvider>
-    </ThemeProvider>
+            </Route>
+          </Routes>
+        </NegotiationProvider>
+      </BrowserRouter>
+    </AuthProvider>
   );
 }
 

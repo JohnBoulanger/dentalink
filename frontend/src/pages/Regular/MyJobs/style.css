@@ -11,7 +11,7 @@
 /* active negotiation banner */
 .myjobs-neg-banner {
   padding: 10px 16px;
-  background: rgba(43, 76, 126, 0.08);
+  background: var(--accent-subtle);
   border: 1px solid var(--accent);
   border-radius: 8px;
   font-size: 0.9375rem;
@@ -128,7 +128,7 @@
 
 .myjob-status-confirmed {
   font-size: 0.8125rem;
-  color: var(--success, #22c55e);
+  color: var(--success);
   font-weight: 600;
 }
 
@@ -141,11 +141,11 @@
 }
 
 .status-open {
-  background: rgba(43, 76, 126, 0.1);
+  background: var(--accent-subtle);
   color: var(--accent);
 }
 .status-filled {
-  background: rgba(45, 106, 79, 0.1);
+  background: var(--status-green-bg);
   color: var(--success);
 }
 .status-expired {
@@ -157,7 +157,7 @@
   color: var(--error);
 }
 .status-completed {
-  background: rgba(45, 106, 79, 0.1);
+  background: var(--status-green-bg);
   color: var(--success);
 }
 

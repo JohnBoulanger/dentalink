@@ -1,4 +1,9 @@
 import { Link } from "react-router-dom";
+import { useAuth } from "../../../contexts/AuthContext/AuthContext";
+import HeroVisual from "./HeroVisual";
+import PlatformStats from "./PlatformStats";
+import FeatureCards from "./FeatureCards";
+import "./style.css";
 
 // position types shown in the scrolling ticker
 const TICKER_ITEMS = [
@@ -13,8 +18,6 @@ const TICKER_ITEMS = [
   "Prosthodontist",
   "Pediatric Dentist",
 ];
-import { useAuth } from "../../../contexts/AuthContext/AuthContext";
-import "./style.css";
 
 export default function Landing() {
   const { isAuthenticated, role } = useAuth();
@@ -28,39 +31,43 @@ export default function Landing() {
 
   return (
     <div className="Landing">
-      {/* full-screen hero */}
+      {/* full-screen hero — split layout with floating cards */}
       <section className="hero">
-        <div className="hero-inner">
-          <p className="hero-eyebrow">dental staffing, simplified</p>
-          <h1>
-            The modern way to
-            <br />
-            staff dental clinics
-          </h1>
-          <p className="hero-subtitle">
-            Connect qualified professionals with clinics that need them. Flexible shifts, verified
-            credentials, real-time matching.
-          </p>
-          <div className="hero-actions">
-            {isAuthenticated ? (
-              <Link to={getDashboardPath()} className="btn-primary hero-btn">
-                Go to dashboard
-              </Link>
-            ) : (
-              <>
-                <Link to="/register" className="btn-primary hero-btn">
-                  Get started
+        <div className="hero-grid">
+          <div className="hero-inner">
+            <p className="hero-eyebrow">dental staffing, simplified</p>
+            <h1>
+              The modern way to
+              <br />
+              staff dental clinics
+            </h1>
+            <p className="hero-subtitle">
+              Connect qualified professionals with clinics that need them. Flexible shifts, verified
+              credentials, real-time matching.
+            </p>
+            <div className="hero-actions">
+              {isAuthenticated ? (
+                <Link to={getDashboardPath()} className="btn-primary hero-btn">
+                  Go to dashboard
                 </Link>
-                <Link to="/login" className="hero-signin">
-                  Sign in →
-                </Link>
-              </>
-            )}
+              ) : (
+                <>
+                  <Link to="/register" className="btn-primary hero-btn">
+                    Get started
+                  </Link>
+                  <Link to="/login" className="hero-signin">
+                    Sign in &rarr;
+                  </Link>
+                </>
+              )}
+            </div>
           </div>
+          <HeroVisual />
         </div>
+
       </section>
 
-      {/* getting started */}
+      {/* getting started steps */}
       <section className="how-it-works">
         <p className="section-label">Getting started</p>
         <div className="steps">
@@ -99,15 +106,28 @@ export default function Landing() {
             {[...TICKER_ITEMS, ...TICKER_ITEMS].map((name, i) => (
               <span key={i} className="ticker-item">
                 {name}
-                <span className="ticker-dot">·</span>
+                <span className="ticker-dot">&middot;</span>
               </span>
             ))}
           </div>
         </div>
       </section>
 
+      {/* platform trust signals */}
+      <PlatformStats />
+
+      {/* feature highlights */}
+      <FeatureCards />
+
+      {/* browse cta — more prominent than before */}
       <section className="browse-cta">
-        <Link to="/businesses">Browse clinics →</Link>
+        <h2>Ready to find your next shift?</h2>
+        <p className="browse-cta-subtitle">
+          Explore dental clinics and open positions across the platform.
+        </p>
+        <Link to="/businesses" className="btn-primary hero-btn">
+          Browse clinics
+        </Link>
       </section>
     </div>
   );

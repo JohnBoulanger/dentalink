@@ -21,11 +21,10 @@ export default function BusinessList() {
   const [page, setPage] = useState(1);
   const [searchInput, setSearchInput] = useState("");
   const keyword = useDebounce(searchInput, 300);
-  const [sortField, setSortField] = useState("business_name");
   const [sortOrder, setSortOrder] = useState("asc");
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
-  // 9 per page keeps the 3-column grid full (3×3)
+  // 9 per page keeps the 3-column grid full (3x3)
   const limit = 9;
 
   // fetch businesses when debounced filters change
@@ -37,7 +36,7 @@ export default function BusinessList() {
         const params: Record<string, string | number> = {
           page,
           limit,
-          sort: sortField,
+          sort: "business_name",
           order: sortOrder,
         };
         if (keyword) params.keyword = keyword;
@@ -55,12 +54,12 @@ export default function BusinessList() {
       }
     }
     fetchBusinesses();
-  }, [page, keyword, sortField, sortOrder]);
+  }, [page, keyword, sortOrder]);
 
   // reset to page 1 when filters change
   useEffect(() => {
     setPage(1);
-  }, [keyword, sortField, sortOrder]);
+  }, [keyword, sortOrder]);
 
   function handleKeywordChange(e: React.ChangeEvent<HTMLInputElement>) {
     setSearchInput(e.target.value);
@@ -71,6 +70,7 @@ export default function BusinessList() {
   return (
     <div className="BusinessList page-enter">
       <h1>Dental clinics</h1>
+      <p className="list-subtitle">{count} clinics on the platform</p>
 
       {/* search + sort controls */}
       <div className="list-controls">
@@ -81,13 +81,9 @@ export default function BusinessList() {
           onChange={handleKeywordChange}
           className="search-input"
         />
-        <select value={sortField} onChange={(e) => setSortField(e.target.value)}>
-          <option value="business_name">Name</option>
-          <option value="createdAt">Newest</option>
-        </select>
         <select value={sortOrder} onChange={(e) => setSortOrder(e.target.value)}>
-          <option value="asc">A → Z</option>
-          <option value="desc">Z → A</option>
+          <option value="asc">A &rarr; Z</option>
+          <option value="desc">Z &rarr; A</option>
         </select>
       </div>
 
@@ -102,10 +98,19 @@ export default function BusinessList() {
           <div className="business-grid">
             {businesses.map((b) => (
               <Link key={b.id} to={`/businesses/${b.id}`} className="business-card">
-                <h3>{b.business_name}</h3>
-                <p className="business-email">{b.email}</p>
-                <p className="business-detail">{b.phone_number}</p>
-                <p className="business-detail">{b.postal_address}</p>
+                <div className="card-header">
+                  <div className="card-avatar" aria-hidden="true">
+                    {b.business_name.charAt(0).toUpperCase()}
+                  </div>
+                  <div>
+                    <h3>{b.business_name}</h3>
+                    <p className="business-email">{b.email}</p>
+                  </div>
+                </div>
+                <div className="card-body">
+                  <p className="business-detail">{b.phone_number}</p>
+                  <p className="business-detail">{b.postal_address}</p>
+                </div>
               </Link>
             ))}
           </div>
