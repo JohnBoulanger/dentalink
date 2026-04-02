@@ -4,7 +4,9 @@
   "description": "Temporary Staffing Platform",
   "main": "server.js",
   "scripts": {
-    "start": "node src/server.js 3000",
+    "start": "node src/server.js ${PORT:-3000}",
+    "start:local": "node src/server.js 3000",
+    "build": "cd ../frontend && npm install && npm run build && cd ../backend && npx prisma generate && npx prisma db push && npx prisma db seed",
     "seed": "node prisma/seed.js",
     "clean": "rm -rf prisma/dev.db* node_modules package-lock.json prisma/migrations/",
     "format": "prettier --write \"src/**/*.js\""

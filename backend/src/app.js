@@ -1,5 +1,6 @@
 "use strict";
 
+const path = require("path");
 const express = require("express");
 const authRoutes = require("./routes/auth");
 const userRoutes = require("./routes/users");
@@ -53,6 +54,23 @@ function create_app() {
       return res.status(413).json({ error: "File too large" });
     }
     next(err);
+  });
+
+  // serve uploaded files (avatars, resumes, qualification docs)
+  app.use("/uploads", express.static(path.join(__dirname, "../uploads")));
+
+  // serve frontend static build in production (single-service deploy)
+  const frontendDist = path.join(__dirname, "../../frontend/dist");
+  app.use(express.static(frontendDist));
+
+  // spa fallback — send index.html for non-api GET requests so react router works
+  app.use((req, res, next) => {
+    if (req.method === "GET" && !req.path.startsWith("/uploads")) {
+      return res.sendFile(path.join(frontendDist, "index.html"), (err) => {
+        if (err) next();
+      });
+    }
+    next();
   });
 
   // route has no matches

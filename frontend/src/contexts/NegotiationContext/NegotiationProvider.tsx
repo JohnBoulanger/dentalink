@@ -11,7 +11,7 @@ export default function NegotiationProvider({ children }: { children: React.Reac
   const [hasActiveNeg, setHasActiveNeg] = useState(false);
   const socketRef = useRef<Socket | null>(null);
 
-  const backendUrl = import.meta.env.VITE_BACKEND_URL || "http://localhost:3000";
+  const backendUrl = import.meta.env.VITE_BACKEND_URL || "";
 
   // check for an active negotiation when user logs in (regular or business)
   // also clear when user logs out (token becomes null)

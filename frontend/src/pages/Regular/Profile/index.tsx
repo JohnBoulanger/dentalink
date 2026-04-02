@@ -21,6 +21,7 @@ interface UserProfile {
 
 interface ApprovedQual {
   id: number;
+  status: string;
   position_type: { id: number; name: string };
   updatedAt: string;
 }
@@ -72,7 +73,7 @@ export default function UserProfile() {
         // only show approved qualifications on the profile
         setApprovedQuals(
           (qualsRes.data.results as ApprovedQual[]).filter(
-            (q: ApprovedQual & { status: string }) => q.status === "approved"
+            (q) => q.status === "approved"
           )
         );
       } catch {
