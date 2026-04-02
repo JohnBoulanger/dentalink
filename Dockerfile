@@ -16,12 +16,10 @@ WORKDIR /app/frontend
 RUN npm install
 RUN npm run build
 
-# set up prisma and seed
+# generate prisma client at build time
 WORKDIR /app/backend
 RUN npx prisma generate
-RUN npx prisma db push
-RUN npx prisma db seed
 
-# start the server
+# db push + seed + start at runtime (so the db persists in the running container)
 EXPOSE ${PORT:-3000}
-CMD ["sh", "-c", "node src/server.js ${PORT:-3000}"]
+CMD ["sh", "-c", "npx prisma db push && npx prisma db seed && node src/server.js ${PORT:-3000}"]
