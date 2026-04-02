@@ -195,7 +195,13 @@ class JobService {
         id: job.business.accountId,
         business_name: job.business.business_name,
       },
-      worker: job.worker ? { id: job.worker.accountId } : null,
+      worker: job.worker
+        ? {
+            id: job.worker.accountId,
+            first_name: job.worker.first_name,
+            last_name: job.worker.last_name,
+          }
+        : null,
       note: job.note,
       salary_min: job.salary_min,
       salary_max: job.salary_max,

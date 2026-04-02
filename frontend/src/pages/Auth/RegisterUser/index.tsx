@@ -130,6 +130,9 @@ export default function RegisterUser() {
         <p className="auth-footer">
           Already have an account? <Link to="/login">Sign in</Link>
         </p>
+        <p className="auth-footer">
+          Registering a clinic? <Link to="/register/business">Register as business</Link>
+        </p>
       </div>
     </div>
   );

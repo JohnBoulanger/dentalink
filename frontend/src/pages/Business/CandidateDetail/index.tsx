@@ -68,6 +68,11 @@ export default function BusinessCandidateDetail() {
       } catch (err) {
         if (axios.isAxiosError(err) && err.response?.status === 404) {
           setError("Candidate not found.");
+        } else if (axios.isAxiosError(err) && err.response?.status === 403) {
+          setError(
+            err.response?.data?.error ||
+              "You don't have permission to view this candidate. The job may no longer be open or you may not own this job."
+          );
         } else {
           setError("Failed to load candidate.");
         }

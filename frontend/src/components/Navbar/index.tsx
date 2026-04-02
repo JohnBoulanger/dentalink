@@ -11,8 +11,11 @@ export default function Navbar() {
   const wrapperRef = useRef<HTMLDivElement>(null);
 
   function handleLogout() {
+    setShowConfirm(false);
     logout();
-    navigate("/login");
+    // defer navigation so react flushes auth state before route change
+    // prevents stale navbar links from flashing on the login page
+    setTimeout(() => navigate("/login"), 0);
   }
 
   // highlight the active nav link — exact match only for leaf routes
