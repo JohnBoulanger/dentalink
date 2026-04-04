@@ -46,11 +46,12 @@ export default function AdminPositionTypes() {
 
   // create form
   const [showCreate, setShowCreate] = useState(false);
-  const [createForm, setCreateForm] = useState({ name: "", description: "", hidden: false });
+  // hidden defaults to true — new position types should be hidden until admin unhides them
+  const [createForm, setCreateForm] = useState({ name: "", description: "", hidden: true });
   const [createPending, setCreatePending] = useState(false);
   const [createError, setCreateError] = useState("");
 
-  const limit = 15;
+  const limit = 10;
   const debouncedKeyword = useDebounce(keyword, 300);
 
   // track previous filter values to detect changes and reset page atomically
@@ -147,9 +148,9 @@ export default function AdminPositionTypes() {
       setCount((c) => c - 1);
       setConfirmDeleteId(null);
     } catch (err) {
-      // 409 = qualified users exist — can't delete
+      // 409 = qualified users or jobs exist — can't delete
       const msg = axios.isAxiosError(err)
-        ? err.response?.data?.error || "Delete failed."
+        ? err.response?.data?.error || "Delete failed. This position type may have linked jobs or qualifications."
         : "Delete failed.";
       setError(msg);
       setConfirmDeleteId(null);
@@ -366,12 +367,6 @@ export default function AdminPositionTypes() {
                             No
                           </button>
                         </>
-                      ) : pt.num_qualified > 0 ? (
-                        // show inline reason instead of title (title is unreliable on disabled buttons)
-                        <span className="pt-no-delete-hint">
-                          {pt.num_qualified} user{pt.num_qualified !== 1 ? "s" : ""} qualified —
-                          cannot delete
-                        </span>
                       ) : (
                         <button
                           className="btn-danger btn-sm"

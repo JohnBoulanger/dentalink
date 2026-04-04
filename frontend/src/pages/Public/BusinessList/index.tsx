@@ -24,8 +24,7 @@ export default function BusinessList() {
   const [sortOrder, setSortOrder] = useState("asc");
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
-  // 9 per page keeps the 3-column grid full (3x3)
-  const limit = 9;
+  const limit = 10;
 
   // fetch businesses when debounced filters change
   useEffect(() => {

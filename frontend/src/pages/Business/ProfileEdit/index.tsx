@@ -2,7 +2,6 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import api from "../../../utils/api";
-import AddressSearch from "../../../components/AddressSearch";
 import "./style.css";
 
 interface ProfileForm {
@@ -56,12 +55,6 @@ export default function BusinessProfileEdit() {
 
   function handleChange(e: React.ChangeEvent<HTMLInputElement>) {
     setForm({ ...form, [e.target.name]: e.target.value });
-  }
-
-  // called when user picks an address suggestion
-  function handleAddressSelect(address: string, lat: number, lon: number) {
-    setForm({ ...form, postal_address: address, lat: String(lat), lon: String(lon) });
-    setError("");
   }
 
   async function handleSubmit(e: React.SyntheticEvent) {
@@ -150,14 +143,14 @@ export default function BusinessProfileEdit() {
             />
           </label>
 
-          {/* address autocomplete — populates postal_address, lat, lon.
-              initialValue pre-fills the input when editing an existing profile */}
           <label className="profile-edit-label">
             Clinic address
-            <AddressSearch
-              placeholder="Search clinic address…"
-              onSelect={handleAddressSelect}
-              initialValue={form.postal_address}
+            <input
+              name="postal_address"
+              type="text"
+              placeholder="Clinic address"
+              value={form.postal_address}
+              onChange={handleChange}
             />
           </label>
 

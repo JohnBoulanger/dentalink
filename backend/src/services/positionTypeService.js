@@ -197,7 +197,7 @@ class PositionTypeService {
     });
 
     if (qualificationCount > 0) {
-      throw { type: "conflict" };
+      throw { type: "conflict", message: "Cannot delete: this position type has qualified users" };
     }
 
     // check jobs
@@ -206,7 +206,7 @@ class PositionTypeService {
     });
 
     if (jobCount > 0) {
-      throw { type: "conflict" };
+      throw { type: "conflict", message: "Cannot delete: this position type has linked job postings" };
     }
 
     await prisma.positionType.delete({

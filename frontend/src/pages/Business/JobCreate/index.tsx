@@ -94,6 +94,15 @@ export default function BusinessJobCreate() {
       return;
     }
 
+    // check job start window — start time can't be more than 7 days from now
+    const maxStart = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000);
+    if (new Date(form.start_time) > maxStart) {
+      setError(
+        "Start time cannot be more than 7 days from now. Jobs must start within the allowed scheduling window."
+      );
+      return;
+    }
+
     setSaving(true);
     try {
       const payload: Record<string, unknown> = {

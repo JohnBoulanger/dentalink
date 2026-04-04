@@ -121,6 +121,7 @@ class NegotiationService {
     });
 
     // send messages to clients
+    let io;
     try {
       io = getIO();
     } catch (e) {

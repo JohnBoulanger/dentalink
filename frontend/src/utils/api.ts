@@ -12,11 +12,14 @@ api.interceptors.request.use((config) => {
   return config;
 });
 
-// auto-logout on expired tokens
+// auto-logout on expired tokens — skip for auth endpoints so login/reset
+// errors don't cause a full page reload
 api.interceptors.response.use(
   (response) => response,
   (error) => {
-    if (error.response?.status === 401) {
+    const url = error.config?.url || "";
+    const isAuthRoute = url.startsWith("/auth/");
+    if (error.response?.status === 401 && !isAuthRoute) {
       localStorage.removeItem("token");
       window.location.href = "/login";
     }

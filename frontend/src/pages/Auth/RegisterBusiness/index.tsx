@@ -3,7 +3,6 @@ import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 import api from "../../../utils/api";
 import PasswordInput from "../../../components/PasswordInput";
-import AddressSearch from "../../../components/AddressSearch";
 import "../RegisterUser/style.css";
 import "./style.css";
 
@@ -26,12 +25,6 @@ export default function RegisterBusiness() {
 
   function handleChange(e: React.ChangeEvent<HTMLInputElement>) {
     setForm({ ...form, [e.target.name]: e.target.value });
-  }
-
-  // called when the user picks a suggestion from AddressSearch
-  function handleAddressSelect(address: string, lat: number, lon: number) {
-    setForm({ ...form, postal_address: address, lat: String(lat), lon: String(lon) });
-    setError("");
   }
 
   async function handleSubmit(e: React.SyntheticEvent) {
@@ -146,8 +139,14 @@ export default function RegisterBusiness() {
             required
           />
 
-          {/* address autocomplete — populates postal_address, lat, lon on selection */}
-          <AddressSearch placeholder="Clinic address" onSelect={handleAddressSelect} required />
+          <input
+            name="postal_address"
+            type="text"
+            placeholder="Clinic address"
+            value={form.postal_address}
+            onChange={handleChange}
+            required
+          />
 
           {/* lat/lon are auto-filled by autocomplete; editable for manual override */}
           <div className="form-row">

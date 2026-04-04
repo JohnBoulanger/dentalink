@@ -4,11 +4,23 @@ import { useAuth } from "../../contexts/AuthContext/AuthContext";
 import "./style.css";
 
 export default function Navbar() {
-  const { isAuthenticated, role, logout } = useAuth();
+  const { isAuthenticated, role, user, logout } = useAuth();
   const location = useLocation();
   const navigate = useNavigate();
   const [showConfirm, setShowConfirm] = useState(false);
   const wrapperRef = useRef<HTMLDivElement>(null);
+
+  const backendUrl = import.meta.env.VITE_BACKEND_URL || "";
+
+  // derive display name and avatar from user context
+  const displayName = user
+    ? role === "business"
+      ? (user.business_name as string) || ""
+      : role === "admin"
+        ? "Admin"
+        : (user.first_name as string) || ""
+    : "";
+  const avatarUrl = user?.avatar ? `${backendUrl}${user.avatar}` : "";
 
   function handleLogout() {
     setShowConfirm(false);
@@ -70,9 +82,6 @@ export default function Navbar() {
             <Link to="/qualifications" className={isActive("/qualifications") ? "active" : ""}>
               Qualifications
             </Link>
-            <Link to="/profile" className={isActive("/profile") ? "active" : ""}>
-              Profile
-            </Link>
           </>
         )}
 
@@ -87,9 +96,6 @@ export default function Navbar() {
               className={isActive("/business/jobs/new", true) ? "active" : ""}
             >
               Post job
-            </Link>
-            <Link to="/business/profile" className={isActive("/business/profile") ? "active" : ""}>
-              Profile
             </Link>
           </>
         )}
@@ -121,12 +127,23 @@ export default function Navbar() {
           </>
         )}
 
-        {/* logout with confirmation popover */}
+        {/* user identity + logout */}
         {isAuthenticated && (
-          <div className="nav-logout-wrap" ref={wrapperRef}>
-            <button onClick={() => setShowConfirm((v) => !v)} className="nav-logout">
-              Sign out
-            </button>
+          <div className="nav-user-section">
+            <Link to={role === "business" ? "/business/profile" : role === "admin" ? "/admin/users" : "/profile"} className="nav-user-identity">
+              {avatarUrl ? (
+                <img src={avatarUrl} alt="" className="nav-avatar" />
+              ) : (
+                <span className="nav-avatar-placeholder">
+                  {displayName.charAt(0).toUpperCase()}
+                </span>
+              )}
+              <span className="nav-user-name">{displayName}</span>
+            </Link>
+            <div className="nav-logout-wrap" ref={wrapperRef}>
+              <button onClick={() => setShowConfirm((v) => !v)} className="nav-logout">
+                Sign out
+              </button>
             {showConfirm && (
               <div className="nav-logout-confirm" role="dialog" aria-label="confirm sign out">
                 <span>Sign out?</span>
@@ -138,6 +155,7 @@ export default function Navbar() {
                 </button>
               </div>
             )}
+            </div>
           </div>
         )}
       </div>

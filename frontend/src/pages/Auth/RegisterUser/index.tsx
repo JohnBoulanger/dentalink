@@ -32,7 +32,10 @@ export default function RegisterUser() {
     setError("");
     setLoading(true);
     try {
-      const response = await api.post("/users", form);
+      // only send birthday if the user actually entered one
+      const payload = { ...form };
+      if (!payload.birthday) delete payload.birthday;
+      const response = await api.post("/users", payload);
       // redirect to activation with the token from response
       navigate(`/activate/${response.data.resetToken}`);
     } catch (err) {

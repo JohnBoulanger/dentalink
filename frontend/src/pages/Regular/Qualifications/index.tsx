@@ -52,6 +52,10 @@ export default function Qualifications() {
   const [actionError, setActionError] = useState<Record<number, string>>({});
   const fileRefs = useRef<Record<number, HTMLInputElement | null>>({});
 
+  // inline note editing state
+  const [editingNoteId, setEditingNoteId] = useState<number | null>(null);
+  const [editNoteValue, setEditNoteValue] = useState("");
+
   // load qualifications from server
   useEffect(() => {
     if (!userId) return;
@@ -120,6 +124,26 @@ export default function Qualifications() {
       const msg = axios.isAxiosError(err)
         ? err.response?.data?.error || "Action failed."
         : "Action failed.";
+      setActionError((prev) => ({ ...prev, [qualId]: msg }));
+    } finally {
+      setActionLoading(null);
+    }
+  }
+
+  // save edited note for a qualification
+  async function handleNoteSave(qualId: number) {
+    setActionLoading(qualId);
+    setActionError((prev) => ({ ...prev, [qualId]: "" }));
+    try {
+      const res = await api.patch(`/qualifications/${qualId}`, { note: editNoteValue });
+      setQuals((prev) =>
+        prev.map((q) => (q.id === qualId ? { ...q, note: res.data.note } : q))
+      );
+      setEditingNoteId(null);
+    } catch (err) {
+      const msg = axios.isAxiosError(err)
+        ? err.response?.data?.error || "Failed to save note."
+        : "Failed to save note.";
       setActionError((prev) => ({ ...prev, [qualId]: msg }));
     } finally {
       setActionLoading(null);
@@ -203,7 +227,45 @@ export default function Qualifications() {
                 <div className="qual-card-header">
                   <div>
                     <h3>{q.position_type.name}</h3>
-                    {q.note && <p className="qual-note">{q.note}</p>}
+                    {/* inline note editing */}
+                    {editingNoteId === q.id ? (
+                      <div className="qual-note-edit">
+                        <textarea
+                          value={editNoteValue}
+                          onChange={(e) => setEditNoteValue(e.target.value)}
+                          rows={2}
+                          placeholder="Add a note..."
+                        />
+                        <div className="qual-note-edit-btns">
+                          <button
+                            className="btn-primary btn-sm"
+                            onClick={() => handleNoteSave(q.id)}
+                            disabled={actionLoading === q.id}
+                          >
+                            {actionLoading === q.id ? "Saving..." : "Save"}
+                          </button>
+                          <button
+                            className="btn-secondary btn-sm"
+                            onClick={() => setEditingNoteId(null)}
+                          >
+                            Cancel
+                          </button>
+                        </div>
+                      </div>
+                    ) : (
+                      <div className="qual-note-row">
+                        {q.note && <p className="qual-note">{q.note}</p>}
+                        <button
+                          className="btn-secondary btn-sm"
+                          onClick={() => {
+                            setEditingNoteId(q.id);
+                            setEditNoteValue(q.note || "");
+                          }}
+                        >
+                          {q.note ? "Edit note" : "Add note"}
+                        </button>
+                      </div>
+                    )}
                   </div>
                   <span className={`qual-status qual-status-${q.status}`}>{q.status}</span>
                 </div>

@@ -33,7 +33,11 @@ class BusinessService {
       throw { type: "validation", message: "Invalid Email" };
     }
     if (!isValidPassword(password)) {
-      throw { type: "validation", message: "Invalid Password" };
+      throw {
+        type: "weak_password",
+        message:
+          "Password must be 8–20 characters with at least one uppercase letter, one lowercase letter, one digit, and one special character",
+      };
     }
 
     // check if a business already exists

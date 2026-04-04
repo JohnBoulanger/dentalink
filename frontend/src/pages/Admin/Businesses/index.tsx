@@ -35,7 +35,7 @@ export default function AdminBusinesses() {
   // per-row verify loading
   const [pendingId, setPendingId] = useState<number | null>(null);
 
-  const limit = 15;
+  const limit = 10;
   const debouncedKeyword = useDebounce(keyword, 300);
 
   // track previous filter values to detect changes and reset page atomically

@@ -62,8 +62,9 @@ export default function MyJobs() {
             params: { page: interestsPage, limit },
           });
           // active interests: jobs still open
-          setInterests(res.data.results.filter((i: Interest) => i.job.status === "open"));
-          setInterestsCount(res.data.count);
+          const active = res.data.results.filter((i: Interest) => i.job.status === "open");
+          setInterests(active);
+          setInterestsCount(active.length);
         } else if (tab === "confirmed") {
           const res = await api.get("/users/me/interests", {
             params: { page: confirmedPage, limit },

@@ -18,7 +18,11 @@ class UserService {
     }
 
     if (!isValidPassword(password)) {
-      throw { type: "validation", message: "Invalid Password" };
+      throw {
+        type: "weak_password",
+        message:
+          "Password must be 8–20 characters with at least one uppercase letter, one lowercase letter, one digit, and one special character",
+      };
     }
 
     let parsedBirthday;
@@ -139,15 +143,10 @@ class UserService {
     const { first_name, last_name, phone_number, postal_address, birthday, avatar, biography } =
       data;
 
-    if (
-      !first_name &&
-      !last_name &&
-      !phone_number &&
-      !postal_address &&
-      !birthday &&
-      !avatar &&
-      !biography
-    ) {
+    // check that at least one updatable field is present in the request body
+    const hasField = ["first_name", "last_name", "phone_number", "postal_address", "birthday", "avatar", "biography"]
+      .some((f) => f in data && data[f] !== undefined);
+    if (!hasField) {
       throw { type: "validation" };
     }
 
@@ -168,7 +167,14 @@ class UserService {
     if ("last_name" in data) update.last_name = last_name;
     if ("phone_number" in data) update.phone_number = phone_number;
     if ("postal_address" in data) update.postal_address = postal_address;
-    if ("birthday" in data) update.birthday = birthday;
+    if ("birthday" in data && birthday) {
+      // parse birthday string to Date for prisma DateTime field
+      const parsed = new Date(birthday);
+      if (isNaN(parsed.getTime())) {
+        throw { type: "validation", message: "Invalid birthday format" };
+      }
+      update.birthday = parsed;
+    }
     if ("avatar" in data) update.avatar = avatar;
     if ("biography" in data) update.biography = biography;
 

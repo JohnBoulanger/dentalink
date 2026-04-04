@@ -5,6 +5,9 @@ async function registerBusiness(req, res) {
     const business = await BusinessService.registerBusiness(req.body);
     return res.status(201).json(business);
   } catch (error) {
+    if (error.type === "weak_password") {
+      return res.status(400).json({ error: error.message });
+    }
     if (error.type === "validation") {
       return res.status(400).json({ error: "Missing or invalid fields in registration request" });
     }
@@ -114,7 +117,8 @@ async function uploadBusinessAvatar(req, res) {
     if (!req.file) {
       return res.status(400).json({ error: "No file uploaded" });
     }
-    const avatarUrl = `/uploads/users/${businessId}/${req.file.filename}`;
+    // multer saves to flat uploads/ dir — URL must match physical location
+    const avatarUrl = `/uploads/${req.file.filename}`;
     const response = await BusinessService.uploadBusinessAvatar(
       avatarUrl,
       businessId,

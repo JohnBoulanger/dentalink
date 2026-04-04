@@ -65,7 +65,7 @@ export default function AdminQualifications() {
   const [actionNote, setActionNote] = useState("");
   const [actionPending, setActionPending] = useState(false);
 
-  const limit = 15;
+  const limit = 10;
   const debouncedKeyword = useDebounce(keyword, 300);
 
   // track previous filter values to detect changes and reset page atomically

@@ -117,9 +117,11 @@ export default function Negotiation() {
   useEffect(() => {
     if (!negotiation || !token) return;
 
+    // allow polling fallback for production environments where websocket
+    // upgrades may not be available immediately
     const socket = io(backendUrl, {
       auth: { token },
-      transports: ["websocket"],
+      transports: ["websocket", "polling"],
     });
 
     socketRef.current = socket;

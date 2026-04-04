@@ -6,6 +6,9 @@ async function registerUser(req, res) {
     const user = await UserService.registerUser(req.body);
     return res.status(201).json(user);
   } catch (error) {
+    if (error.type === "weak_password") {
+      return res.status(400).json({ error: error.message });
+    }
     if (error.type === "validation") {
       return res.status(400).json({ error: "Missing or invalid fields in registration request" });
     }
@@ -119,7 +122,8 @@ async function uploadUserAvatar(req, res) {
     if (!req.file) {
       return res.status(400).json({ error: "No file uploaded" });
     }
-    const avatarUrl = `/uploads/users/${userId}/${req.file.filename}`;
+    // multer saves to flat uploads/ dir — URL must match physical location
+    const avatarUrl = `/uploads/${req.file.filename}`;
     const response = await UserService.uploadUserAvatar(avatarUrl, userId);
     return res.status(200).json(response);
   } catch (error) {
@@ -140,7 +144,8 @@ async function uploadUserResume(req, res) {
     if (!req.file) {
       return res.status(400).json({ error: "No file uploaded" });
     }
-    const resumeUrl = `/uploads/users/${userId}/${req.file.filename}`;
+    // multer saves to flat uploads/ dir — URL must match physical location
+    const resumeUrl = `/uploads/${req.file.filename}`;
     const response = await UserService.uploadUserResume(resumeUrl, userId);
     return res.status(200).json(response);
   } catch (error) {

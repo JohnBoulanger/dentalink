@@ -36,9 +36,11 @@ export default function NegotiationProvider({ children }: { children: React.Reac
   useEffect(() => {
     if (!token || (role !== "regular" && role !== "business")) return;
 
+    // allow polling fallback for production environments (e.g. railway) where
+    // websocket upgrades may not be available immediately
     const socket = io(backendUrl, {
       auth: { token },
-      transports: ["websocket"],
+      transports: ["websocket", "polling"],
     });
     socketRef.current = socket;
 

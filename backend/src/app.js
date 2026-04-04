@@ -33,8 +33,30 @@ function create_app() {
     })
   );
 
-  // security headers
-  app.use(helmet());
+  // security headers — relax CSP so leaflet map tiles and styles load
+  // allow cross-origin resource loading so frontend can display uploaded files
+  app.use(
+    helmet({
+      contentSecurityPolicy: {
+        directives: {
+          defaultSrc: ["'self'"],
+          scriptSrc: ["'self'", "'unsafe-inline'", "'unsafe-eval'"],
+          styleSrc: ["'self'", "'unsafe-inline'", "https://unpkg.com"],
+          imgSrc: [
+            "'self'",
+            "data:",
+            "blob:",
+            "https://*.basemaps.cartocdn.com",
+            "https://*.tile.openstreetmap.org",
+          ],
+          connectSrc: ["'self'", "ws:", "wss:", "https://nominatim.openstreetmap.org"],
+          fontSrc: ["'self'", "data:"],
+          objectSrc: ["'none'"],
+        },
+      },
+      crossOriginResourcePolicy: { policy: "cross-origin" },
+    })
+  );
 
   // parse json with size limit to prevent oversized payloads
   app.use(express.json({ limit: "1mb" }));

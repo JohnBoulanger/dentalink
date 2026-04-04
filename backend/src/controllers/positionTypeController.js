@@ -75,7 +75,7 @@ async function deletePositionType(req, res) {
     if (error.type === "conflict") {
       return res
         .status(409)
-        .json({ error: "Cannot delete: this position type has qualified users" });
+        .json({ error: error.message || "Cannot delete: this position type is in use" });
     }
     return res.status(500).json({ error: "Internal Server Error" });
   }

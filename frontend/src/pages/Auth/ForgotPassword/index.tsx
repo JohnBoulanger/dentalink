@@ -1,15 +1,15 @@
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 import api from "../../../utils/api";
 import "../RegisterUser/style.css";
 import "./style.css";
 
 export default function ForgotPassword() {
+  const navigate = useNavigate();
   const [email, setEmail] = useState("");
   const [status, setStatus] = useState<"idle" | "loading" | "success" | "error">("idle");
   const [error, setError] = useState("");
-  const [resetToken, setResetToken] = useState("");
 
   async function handleSubmit(e: React.SyntheticEvent) {
     e.preventDefault();
@@ -17,8 +17,8 @@ export default function ForgotPassword() {
     setStatus("loading");
     try {
       const response = await api.post("/auth/resets", { email });
-      setResetToken(response.data.resetToken);
-      setStatus("success");
+      // navigate directly to reset page — don't expose the token in UI
+      navigate(`/reset-password/${response.data.resetToken}`);
     } catch (err) {
       setStatus("error");
       if (axios.isAxiosError(err)) {
@@ -34,22 +34,6 @@ export default function ForgotPassword() {
         setError("Request failed");
       }
     }
-  }
-
-  // show the reset token after successful request
-  if (status === "success") {
-    return (
-      <div className="ForgotPassword page-enter">
-        <div className="auth-card">
-          <div className="auth-success">
-            <h2>Reset link generated</h2>
-            <p>Use the link below to reset your password.</p>
-            <div className="token-display">{resetToken}</div>
-            <Link to={`/reset-password/${resetToken}`}>Reset password</Link>
-          </div>
-        </div>
-      </div>
-    );
   }
 
   return (
