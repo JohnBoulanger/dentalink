@@ -22,6 +22,11 @@ const BUSINESS_DATA = [
   { name: 'College Dental Clinic', owner: 'Robert Nguyen', lon: -79.3965, lat: 43.6580, address: '400 College St, Toronto', phone: '416-555-0108' },
   { name: 'Harbourfront Dental', owner: 'Lisa Thompson', lon: -79.3810, lat: 43.6390, address: '10 Queens Quay W, Toronto', phone: '416-555-0109' },
   { name: 'CSSU Dental', owner: 'Kevin Brown', lon: -79.3950, lat: 43.6600, address: '6 Hoskin Ave, Toronto', phone: '416-555-0110' },
+  { name: 'Annex Dental Studio', owner: 'Stephanie Ross', lon: -79.4050, lat: 43.6690, address: '388 Bloor St W, Toronto', phone: '416-555-0111' },
+  { name: 'Rosedale Dental', owner: 'Patrick O\'Brien', lon: -79.3780, lat: 43.6770, address: '1030 Yonge St, Toronto', phone: '416-555-0112' },
+  { name: 'Liberty Village Dental', owner: 'Michelle Tran', lon: -79.4200, lat: 43.6380, address: '171 E Liberty St, Toronto', phone: '416-555-0113' },
+  { name: 'Leslieville Dental Care', owner: 'Andrew Campbell', lon: -79.3290, lat: 43.6650, address: '1100 Queen St E, Toronto', phone: '416-555-0114' },
+  { name: 'Midtown Dental Centre', owner: 'Laura Singh', lon: -79.3930, lat: 43.6870, address: '2300 Yonge St, Toronto', phone: '416-555-0115' },
 ];
 
 const REGULAR_FIRST_NAMES = [
@@ -106,7 +111,7 @@ async function main() {
 
   // --- Businesses ---
   const businessIds = [];
-  for (let i = 0; i < 10; i++) {
+  for (let i = 0; i < 15; i++) {
     const b = BUSINESS_DATA[i];
     const account = await prisma.account.create({
       data: {
@@ -122,7 +127,7 @@ async function main() {
             postal_address: b.address,
             lon: b.lon,
             lat: b.lat,
-            verified: i < 8, // first 8 verified, last 2 unverified
+            verified: i < 8, // first 8 verified, rest unverified
             biography: `${b.name} is a modern dental clinic in the heart of Toronto, dedicated to providing exceptional dental care.`,
           },
         },
@@ -194,6 +199,37 @@ async function main() {
     }
   }
   console.log(`Created ${qualCount} qualifications`);
+
+  // --- ensure regular1 has approved qualifications for demo ---
+  // regular1 (index 0) gets position types 0 and 1 from the loop above
+  // override them to approved so regular1 can set available=true and browse jobs
+  await prisma.qualification.updateMany({
+    where: { userId: regularIds[0] },
+    data: { status: 'approved' },
+  });
+  console.log('Updated regular1 qualifications to approved');
+
+  // add a rejected qualification for regular1 (for revision demo)
+  await prisma.qualification.create({
+    data: {
+      userId: regularIds[0],
+      positionTypeId: positionTypeIds[2], // dental hygienist
+      status: 'rejected',
+      note: 'Previous submission was incomplete — please resubmit with updated certification.',
+    },
+  });
+  console.log('Created rejected qualification for regular1 (revision demo)');
+
+  // ensure regular2 and regular3 also have approved qualifications for negotiation/no-show demos
+  await prisma.qualification.updateMany({
+    where: { userId: regularIds[1] },
+    data: { status: 'approved' },
+  });
+  await prisma.qualification.updateMany({
+    where: { userId: regularIds[2] },
+    data: { status: 'approved' },
+  });
+  console.log('Updated regular2 and regular3 qualifications to approved');
 
   // --- Jobs ---
   // Create 35 jobs across different statuses and businesses
@@ -314,6 +350,24 @@ async function main() {
     jobRecords.push(job);
   }
 
+  // --- special job: filled and currently in work window (for no-show demo) ---
+  // regular3 (index 2) has position type 2 approved; business1 (index 0)
+  const noShowJob = await prisma.job.create({
+    data: {
+      businessId: businessIds[0], // business1
+      positionTypeId: positionTypeIds[2], // regular3's first qual position type (index 2)
+      salary_min: 35,
+      salary_max: 45,
+      start_time: new Date(now.getTime() - 2 * 60 * 60 * 1000), // 2 hours ago
+      end_time: new Date(now.getTime() + 6 * 60 * 60 * 1000),   // 6 hours from now
+      status: 'filled',
+      workerId: regularIds[2], // regular3
+      note: 'Active shift — currently in work window (for no-show demo).',
+    },
+  });
+  jobRecords.push(noShowJob);
+  console.log(`Created no-show demo job (id: ${noShowJob.id})`);
+
   console.log(`Created ${jobRecords.length} jobs`);
 
   // --- Interests ---
@@ -376,6 +430,69 @@ async function main() {
     } catch (e) {
       // skip duplicates
     }
+  }
+
+  // --- dedicated jobs + mutual interests for negotiation demo ---
+  // create two open jobs from business1 specifically for negotiations
+  const negJob1 = await prisma.job.create({
+    data: {
+      businessId: businessIds[0], // business1
+      positionTypeId: positionTypeIds[0], // matches regular1's approved qual
+      salary_min: 40,
+      salary_max: 50,
+      start_time: futureDate(3, 9),
+      end_time: futureDate(3, 17),
+      status: 'open',
+      note: 'Negotiation demo job 1 — for regular1.',
+    },
+  });
+  jobRecords.push(negJob1);
+
+  const negJob2 = await prisma.job.create({
+    data: {
+      businessId: businessIds[0], // business1
+      positionTypeId: positionTypeIds[1], // matches regular2's approved qual
+      salary_min: 42,
+      salary_max: 52,
+      start_time: futureDate(4, 10),
+      end_time: futureDate(4, 18),
+      status: 'open',
+      note: 'Negotiation demo job 2 — for regular2 (decline path).',
+    },
+  });
+  jobRecords.push(negJob2);
+  console.log(`Created 2 negotiation demo jobs (ids: ${negJob1.id}, ${negJob2.id})`);
+
+  // mutual interest: regular1 ↔ negJob1
+  try {
+    const mi1 = await prisma.interest.create({
+      data: {
+        jobId: negJob1.id,
+        userId: regularIds[0],
+        userInterested: true,
+        businessInterested: true,
+      },
+    });
+    interestRecords.push(mi1);
+    console.log(`Created mutual interest: regular1 ↔ job ${negJob1.id}`);
+  } catch (e) {
+    console.log('Mutual interest for regular1 already exists, skipping');
+  }
+
+  // mutual interest: regular2 ↔ negJob2
+  try {
+    const mi2 = await prisma.interest.create({
+      data: {
+        jobId: negJob2.id,
+        userId: regularIds[1],
+        userInterested: true,
+        businessInterested: true,
+      },
+    });
+    interestRecords.push(mi2);
+    console.log(`Created mutual interest: regular2 ↔ job ${negJob2.id}`);
+  } catch (e) {
+    console.log('Mutual interest for regular2 already exists, skipping');
   }
 
   console.log(`Created ${interestRecords.length} interests`);

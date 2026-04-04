@@ -134,6 +134,15 @@ function attach_sockets(server) {
         return;
       }
 
+      // persist message to database
+      const saved = await prisma.negotiationMessage.create({
+        data: {
+          negotiationId,
+          senderAccountId: socket.userId,
+          text,
+        },
+      });
+
       const response = {
         negotiation_id: negotiationId,
         sender: {
@@ -141,7 +150,7 @@ function attach_sockets(server) {
           id: socket.userId,
         },
         text: text,
-        createdAt: new Date(),
+        createdAt: saved.createdAt,
       };
       io.to(`negotiation:${negotiationId}`).emit("negotiation:message", response);
     });

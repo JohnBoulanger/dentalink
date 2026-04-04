@@ -191,6 +191,10 @@ class NegotiationService {
             positionType: true,
           },
         },
+        negotiationMessages: {
+          orderBy: { createdAt: "asc" },
+          include: { sender: true },
+        },
       },
     });
 
@@ -232,6 +236,12 @@ class NegotiationService {
         candidate: negotiation.candidateDecision,
         business: negotiation.businessDecision,
       },
+      messages: negotiation.negotiationMessages.map((m) => ({
+        negotiation_id: negotiation.id,
+        sender: { role: m.sender.role, id: m.senderAccountId },
+        text: m.text,
+        createdAt: m.createdAt,
+      })),
     };
   }
 

@@ -71,6 +71,14 @@ export default function Negotiation() {
       try {
         const res = await api.get("/negotiations/me");
         setNegotiation(res.data);
+        // seed chat history from persisted messages
+        if (res.data.messages?.length) {
+          setMessages(res.data.messages);
+        }
+        // clear any stale state from strict-mode double-mount
+        else {
+          setMessages([]);
+        }
       } catch (err) {
         if (axios.isAxiosError(err) && err.response?.status === 404) {
           setNotFound(true);
@@ -126,10 +134,15 @@ export default function Negotiation() {
 
     socketRef.current = socket;
 
-    // receive chat messages
+    // receive chat messages (deduplicate by createdAt+sender to handle strict-mode double-mount)
     socket.on("negotiation:message", (msg: ChatMessage) => {
       if (msg.negotiation_id === negotiation.id) {
-        setMessages((prev) => [...prev, msg]);
+        setMessages((prev) => {
+          const isDupe = prev.some(
+            (m) => m.createdAt === msg.createdAt && m.sender.id === msg.sender.id && m.text === msg.text
+          );
+          return isDupe ? prev : [...prev, msg];
+        });
       }
     });
 
