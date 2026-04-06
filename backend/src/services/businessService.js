@@ -247,6 +247,7 @@ class BusinessService {
         role: b.account.role,
         phone_number: b.phone_number,
         postal_address: b.postal_address,
+        location: { lat: b.lat, lon: b.lon },
       };
 
       if (requesterRole === "admin") {

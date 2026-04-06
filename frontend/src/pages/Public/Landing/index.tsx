@@ -52,8 +52,8 @@ export default function Landing() {
                 </Link>
               ) : (
                 <>
-                  <Link to="/register" className="btn-primary hero-btn">
-                    Get started
+                  <Link to="/businesses" className="btn-primary hero-btn">
+                    View clinics
                   </Link>
                   <Link to="/login" className="hero-signin">
                     Sign in &rarr;
