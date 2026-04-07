@@ -1,6 +1,7 @@
 /*
  * Seed script for A3 — populates the database with demo data.
  * Usage: npm run seed
+ * Re runs whenever changes are commited
  */
 'use strict';
 
