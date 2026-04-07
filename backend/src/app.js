@@ -23,7 +23,7 @@ function create_app() {
   // trust reverse proxy (railway, nginx) so rate limiting uses real client ip
   app.set("trust proxy", 1);
 
-  // Set up cors to allow requests from frontend
+  // set up cors to allow requests from frontend
   app.use(
     cors({
       origin: FRONTEND_URL,
